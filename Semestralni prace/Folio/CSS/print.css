@@ -1,0 +1,162 @@
+/* general */
+* {
+    padding: 0;
+    margin: 1px;
+    font-family: Ubuntu Condensed,Geneva, Tahoma, sans-serif ;
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    float:center;
+}
+
+/* navbar */
+.group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    filter: grayscale(100%);
+}
+
+#navbar {
+    display: none;
+}
+
+/* headers */
+h1 {
+    font-size: 50px;
+    font-weight: 700;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    margin: 0px;
+    padding: 0;
+}
+
+h2 {
+    font-size: 30px;
+    font-weight: 700;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    margin-bottom: 10px;
+    padding: 0;
+}
+/* links */
+a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+/* links hover */
+a:hover {
+    color: rgb(161, 161, 161);
+    border-radius: 10px;
+}
+
+
+/* table */
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    color: rgb(150, 150, 150);
+    font-family: Ubuntu Condensed,Geneva, Tahoma, sans-serif ;
+    font-size: 25px;
+    text-align: left;
+    margin: 25px 0;
+}
+
+th {
+    background-color: rgb(28, 28, 28);
+    color: white;
+}
+
+/* footer */
+footer {
+    display: flex;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px;
+    color: rgb(0, 0, 0);
+    margin-top:150px;
+    float: right;
+}
+
+/* Forms */
+
+.content {
+    float:center;
+    text-align: center;
+}
+fieldset {
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    padding: 10px;
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    float: center;
+
+}
+
+
+
+input[type="text"], input[type="password"], input[type="email"], input[type="number"], input[type="date"], input[type="tel"], input[type="url"], input[type="search"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="color"], textarea, select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 4px;
+}
+
+input[type=text]:focus, input[type=password]:focus , input[type=email]:focus, input[type=number]:focus, input[type=date]:focus{
+    background-color: rgb(255, 255, 255);
+    outline: none;
+  }
+
+/* Select */
+
+select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 4px;
+    
+  }
+
+select:focus {
+    background-color: rgb(255, 255, 255);
+    outline: none;
+  }
+  
+/* Buttons */
+
+button {
+    background-color: rgb(167, 167, 167) ;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+    float: center;
+    width: 50%;
+  }
+  
+  button:hover {
+    opacity:1;
+  }
+
+@media screen and (max-width: 300px) {
+    .cancelbtn, .signupbtn {
+      width: 100%;
+    }
+}
