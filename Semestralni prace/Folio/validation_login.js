@@ -1,3 +1,5 @@
+
+
 //queryselector variables and invalid element messages
 const formElement = document.querySelector("form");
 formElement.addEventListener("submit", validateall);
@@ -29,9 +31,10 @@ function timerpassword(e){
     timer = setTimeout(function() {validatepassword(e)}, 300);
 }
 function validateall(e){
+    console.log("validateall")
     validateemail(e);
     validatepassword(e);
-    if (invalid_email.innerHTML != "" || invalid_password.innerHTML != ""){
+    if (invalid_email.style.display == "block" || invalid_password.style.display == "block" || email.value.length == 0 || password.value.length == 0){
         e.preventDefault();
     }
 }
@@ -39,33 +42,13 @@ function validateall(e){
 //validation for inputs
 function validateemail(e){
     if (email.value.length != 0){
-        if (email.value.includes("@") == false)
+        if (email.value.includes("@") == false || email.value.includes(".") == false || email.value.length < 8)
         {
             invalid_email.style.display = "block";
         }
         else{
             invalid_email.style.display = "none";
-            
         }
-        if (email.value.includes(".") == false)
-        {
-            invalid_email.style.display = "block";
-        }
-        else{
-            invalid_email.style.display = "none";
-            ;
-        }
-        if (email.value.length < 10)
-        {
-            invalid_email.style.display = "block";
-            
-        }
-        else{
-            invalid_email.style.display = "none";
-        }
-    }
-    else{
-        invalid_email.style.display = "none";
     }
 }
 

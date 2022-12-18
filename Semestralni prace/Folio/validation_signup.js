@@ -121,33 +121,13 @@
 
     function validateemail(e){
         if (email.value.length != 0){
-            if (email.value.includes("@") == false)
-            {
-                invalid_email.style.display = "block";
-            }
-            else{
-                invalid_email.style.display = "none";
-                
-            }
-            if (email.value.includes(".") == false)
+            if (email.value.includes("@") == false || email.value.includes(".") == false || email.value.length < 8)
             {
                 invalid_email.style.display = "block";
             }
             else{
                 invalid_email.style.display = "none";
             }
-            if (email.value.length < 8)
-            {
-                invalid_email.style.display = "block";
-                
-            }
-            else{
-                invalid_email.style.display = "none";
-                ;
-            }
-        }
-        else{
-            invalid_email.style.display = "none";
         }
         checkrequired();
     }

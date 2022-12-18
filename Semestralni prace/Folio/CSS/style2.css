@@ -6,18 +6,17 @@
     color: rgb(37, 102, 183);
     background-color: rgb(255, 224, 98);
     float:center;
+    align-items: center;
 }
 
 /* navbar */
 header{
-    display: flex;
     text-align: row;
     font-size: 50px;
     font-weight: bold;
     padding: 10px;
     color: rgb(37, 102, 183);
     margin-top:0px;
-    float: left;
     flex: center;
     align-items: row;
     justify-content: row;
@@ -27,7 +26,7 @@ header{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: left;
     align-items: center;
     align-content: space-between;
     
@@ -47,6 +46,7 @@ h1 {
 }
 
 h2 {
+    text-align: center;
     font-size: 30px;
     font-weight: 700;
     text-align: center;
