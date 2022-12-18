@@ -3,39 +3,24 @@
     padding: 0;
     margin: 1px;
     font-family: Ubuntu Condensed,Geneva, Tahoma, sans-serif ;
-    color: rgb(37, 102, 183);
-    background-color: rgb(255, 224, 98);
+    color: rgb(0, 56, 124);
+    background-color: rgb(114, 194, 194);
     float:center;
 }
 
 /* navbar */
-header{
-    display: flex;
-    text-align: row;
-    font-size: 20px;
-    font-weight: bold;
-    padding: 10px;
-    color: rgb(37, 102, 183);
-    margin-top:0px;
-    float: left;
-    flex: center;
-    align-items: row;
-    justify-content: row;
-}
-
 .group {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    align-content: space-between;
+    align-content: center;
     
 }
 
 #punchline{
     margin-bottom: 10px;
-    display: none;
 }
 /* headers */
 h1 {
@@ -50,7 +35,7 @@ h2 {
     font-size: 30px;
     font-weight: 700;
     text-align: center;
-    margin-bottom: 10px;
+    margin: 10px;
     padding: 0;
 }
 /* links */
@@ -78,16 +63,17 @@ table {
     font-family: Ubuntu Condensed,Geneva, Tahoma, sans-serif ;
     font-size: 25px;
     text-align: left;
+    padding-bottom: 30px;
 }
 
 th {
-    background-color: rgb(37, 102, 183);
+    background-color: rgb(0, 56, 124);
     color: white;
     margin-right: 5px;
     padding: 4px;
 }
 .thcontent {
-    background-color: rgb(37, 102, 183);
+    background-color: rgb(0, 56, 124);
     color: white;
     margin-right: 5px;
 }
@@ -99,23 +85,14 @@ footer {
     font-size: 20px;
     font-weight: bold;
     padding: 10px;
-    color: rgb(37, 102, 183);
+    color: rgb(0, 56, 124);
     margin-top:150px;
     float: right;
     flex: auto;
-    align-items: row;
-    justify-content: row;
+    align-items: center;
+    justify-content: center;
 }
 
-.footer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    align-content: center;
-    
-}
 /* Forms */
 
 .content {
@@ -123,7 +100,7 @@ footer {
     text-align: center;
 }
 fieldset {
-    border: 1px solid rgb(37, 102, 183);
+    border: 1px solid rgb(0, 56, 124);
     border-radius: 10px;
     padding: 10px;
     margin: auto;
@@ -144,7 +121,7 @@ label {
     padding: 0;
     font-size: 20px;
     font-weight: bold;
-    color: rgb(37, 102, 183);
+    color: rgb(0, 56, 124);
 }
 
 
@@ -153,7 +130,7 @@ input[type="text"], input[type="password"], input[type="email"], input[type="num
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
-    border: 2px solid rgb(37, 102, 183);
+    border: 2px solid rgb(0, 56, 124);
     border-radius: 4px;
 }
 
@@ -169,7 +146,7 @@ select {
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
-    border: 2px solid rgb(37, 102, 183);
+    border: 2px solid rgb(0, 56, 124);
     border-radius: 4px;
     
   }
@@ -201,7 +178,7 @@ button:hover {
 
 /* Name Button */
 #namebutton {
-    background-color: rgb(255, 224, 98);
+    background-color: rgb(114, 194, 194);
     font-size: 20px;
     font-weight: bold;
     padding: 14px 20px;
@@ -211,17 +188,16 @@ button:hover {
     width: 100%;
     opacity: 1.0;
     float: right;
-    color: rgb(37, 102, 183);
 }
 /* Invisible Invalid */
 .invalid {
-    border: 2px solid rgb(61, 184, 183);
+    border: 2px solid rgb(226, 226, 226);
     border-radius: 4px;
     margin: 2px;
     width: max-content;
     padding: 1px 6px;
     text-align: left;
-    color: rgb(61, 184, 183);
+    color: rgb(226, 226, 226);
     font-size: 15px;
     display: none;
 }
