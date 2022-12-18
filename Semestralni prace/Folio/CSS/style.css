@@ -9,18 +9,33 @@
 }
 
 /* navbar */
+header{
+    display: flex;
+    text-align: row;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px;
+    color: rgb(37, 102, 183);
+    margin-top:0px;
+    float: left;
+    flex: center;
+    align-items: row;
+    justify-content: row;
+}
+
 .group {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    align-content: center;
+    align-content: space-between;
     
 }
 
 #punchline{
     margin-bottom: 10px;
+    display: none;
 }
 /* headers */
 h1 {

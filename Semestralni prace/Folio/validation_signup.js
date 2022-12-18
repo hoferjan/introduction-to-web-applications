@@ -136,7 +136,7 @@
             else{
                 invalid_email.style.display = "none";
             }
-            if (email.value.length < 10)
+            if (email.value.length < 8)
             {
                 invalid_email.style.display = "block";
                 

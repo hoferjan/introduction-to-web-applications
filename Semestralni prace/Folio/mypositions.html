@@ -149,13 +149,13 @@
                     <legend></legend>
 
                     <label for="name">Name: </label>
-                    <input type="text" id="name" name="name" placeholder="Enter Name" required>
+                    <input type="text" id="name" name="name" placeholder="Enter Name" required pattern=".{4,}">
                     <div class= "invalid" id="invalid_name">
                       Please enter a valid name
                     </div>
 
                     <label for="ticker">Ticker: </label>
-                    <input type="text" id="ticker" name="ticker" placeholder="Enter Ticker" required>
+                    <input type="text" id="ticker" name="ticker" placeholder="Enter Ticker" required pattern=".{2,}">
                     <div class= "invalid" id="invalid_ticker">
                       Please enter a valid ticker
                     </div>
@@ -193,7 +193,7 @@
                     </div>
 
                     <label for="close_price">Closing price: </label>
-                    <input type="number" id="close_price" name="close_price" placeholder="Enter close price" required>
+                    <input type="number" id="close_price" name="close_price" placeholder="Enter close price">
                     <div class= "invalid" id="invalid_close_price">
                       Please enter a valid price
                     </div>

@@ -34,7 +34,7 @@ close_price.addEventListener("keyup", timerclose_price);
 
 // functions that run timer for each input
 var timer = null;
-function timername(e){ //combine timer function togethter for cleaner code
+function timername(e){ 
     if (timer != null) {
         clearTimeout(timer);
         timer = null;
@@ -116,19 +116,19 @@ function validateamount(e){
     }
     checkrequired();
 }
-
-function validate_close_price(e){
-    if (close_price.value.length != 0) {
-        if (close_price.value < 1) {
-            invalid_close_price.style.display = "block";
-        } else {
-            invalid_close_price.style.display = "none";
-        }
-    } else {
-        invalid_close_price.style.display = "none";
-    }
-    checkrequired();
-}
+//not necessery because user can just open position and not close it
+// function validate_close_price(e){
+//     if (close_price.value.length != 0) {
+//         if (close_price.value < 1) {
+//             invalid_close_price.style.display = "block";
+//         } else {
+//             invalid_close_price.style.display = "none";
+//         }
+//     } else {
+//         invalid_close_price.style.display = "none";
+//     }
+//     checkrequired();
+// }
 
 function validate_open_price(e){
     if (open_price.value.length != 0) {

@@ -88,19 +88,10 @@ footer {
     margin-top:150px;
     float: right;
     flex: auto;
-    align-items: row;
-    justify-content: row;
+    align-items: center;
+    justify-content: center;
 }
 
-.footer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    align-content: center;
-    
-}
 /* Forms */
 
 .content {
