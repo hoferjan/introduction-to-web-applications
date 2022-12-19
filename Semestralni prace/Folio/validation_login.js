@@ -31,7 +31,6 @@ function timerpassword(e){
     timer = setTimeout(function() {validatepassword(e)}, 300);
 }
 function validateall(e){
-    console.log("validateall")
     validateemail(e);
     validatepassword(e);
     if (invalid_email.style.display == "block" || invalid_password.style.display == "block" || email.value.length == 0 || password.value.length == 0){

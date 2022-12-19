@@ -144,13 +144,11 @@
 
     //final function that checks if all inputs are valid whne submit button is pressed
     function validateall(e){
-        e.preventDefault();
         if (invalid_length_password.style.display == "block" || invalid_match_password.style.display == "block" || invalid_length_nickname.style.display == "block" || invalid_email.style.display == "block" || password.value.length == 0 || nickname.value.length == 0 || email.value.length == 0)
         {
             invalid_form.style.display = "block";
+            e.preventDefault();
         }
-        else {
-            alert("Form submitted"); //later add what it does when correct form is submitted
-        }
+
     }
 

@@ -1,5 +1,5 @@
 <?php
-//LOGIN
+//Login and registration validation
     //email validation
     function validateEmail($email) {
         return strpos($email, '@') &&  strlen($email) >= 8 && strpos($email, '.') ? true : false;
@@ -10,8 +10,18 @@
         return strlen($password) >= 8;
     }
 
-    // name validation
-    function validateName($name) {
-        return strlen($name) >= 3;
+    //nickname validation
+    function validateNickname($nickname) {
+        return strlen($nickname) >= 5;
     }
+
+    //repeated password validation
+    function validateRepeatPassword($password, $password2) {
+        return $password == $password2;
+    }
+
+    //favorite type validation not required, ready if needed
+    // function validateFavoriteType($favoriteType) {
+    //     return $favoriteType != '0' && $favoriteType != '---------' && $favoriteType != '' && $favoriteType != 'not_selected';
+    // }
 ?>

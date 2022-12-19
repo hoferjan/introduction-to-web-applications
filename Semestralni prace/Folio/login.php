@@ -13,7 +13,7 @@
         $passwordIsValid = validatePassword($password);
 
         if ($emailIsValid && $passwordIsValid) {
-            // checks if email and password are correct
+            //checks if email and password are correct
             //redirect to mypositions.php and logs in user
             header("Location: mypositions.php");
         } else {
@@ -63,16 +63,25 @@
                         <div class= "invalid" id="invalid_email">
                             Please enter a valid email
                         </div>
+                        <?php
+                        if (isset($emailIsValid) && $emailIsValid == false) {
+                            echo '<br><span class="invalid-php">Invalid Entry</span><br>';
+                            }
+                        ?>
                     
                         <label for="password">Password: </label>
                         
                         <input type="password" id="password" name="password" placeholder="Enter Password" required pattern=".{8,}" value="<?= htmlspecialchars($password); ?>">
                         <div class= "invalid" id="invalid_password">
                             Please enter a valid password
-
                         </div>
+                        <?php
+                        if (isset($passwordIsValid) && $passwordIsValid == false) {
+                            echo '<br><span class="invalid-php">Invalid Entry</span><br>';
+                            }
+                        ?>
                         <div class="clearfix">
-                            <button type="submit" name="log" class="signupbtn">Log in</button>
+                            <button type="submit" name="log" >Log in</button>
                         </div>
                     </fieldset>
                 </form>

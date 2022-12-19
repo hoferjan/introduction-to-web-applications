@@ -1,3 +1,38 @@
+<?php 
+    require "PHP/validation.php";
+    $formIsSent = isset($_POST["reg"]);
+
+    $email = '';
+    $password = '';
+    $repeat_password = '';
+    $nickname = '';
+    $favorite_type = '';
+
+    if ($formIsSent) {
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+        $repeat_password = $_POST["repeat_password"];
+        $nickname = $_POST["nickname"];
+        $favorite_type = $_POST["favorite_type"];
+
+
+        $emailIsValid = validateEmail($email);
+        $passwordIsValid = validatePassword($password);
+        $repeatPasswordIsValid = validateRepeatPassword($repeat_password, $password);
+        $nicknameIsValid = validateNickname($nickname);
+
+        if ($emailIsValid && $passwordIsValid && $repeatPasswordIsValid && $nicknameIsValid) {
+            //checks if email and password are not yet in the database
+            //creates new account in database
+            //redirect to mypositions.php and logs in user
+            header("Location: mypositions.php");
+        } else {
+            echo($favorite_type);
+            //shows errors under the input fields
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -27,28 +62,37 @@
                 <a href="signup.php">Sign up</a>
             </div>
           </header>
-        <form action="register" method="POST">
+        <form action="" method="POST">
             <h2>Sign up:</h2>
             <fieldset>
                 <legend></legend>
 
                 <label for="email">Email: </label>
                 
-                <input type="email" id="email" name="email" placeholder="Enter Email*" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                <input type="email" id="email" name="email" placeholder="Enter Email*" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" value="<?= htmlspecialchars($email); ?>">
                 <div class= "invalid" id="invalid_email">
                     Please enter a valid email
                 </div>
-                
+                <?php
+                if (isset($emailIsValid) && $emailIsValid == false) {
+                    echo '<br><span class="invalid-php">Invalid Entry</span><br>';
+                    }
+                ?>
 
                 <label for="nickname">Nickname: </label>
                 
-                <input type="text" id="nickname" name="nickname" placeholder="Enter Nickname*" required pattern=".{5,}">
+                <input type="text" id="nickname" name="nickname" placeholder="Enter Nickname*" required pattern=".{5,}" value="<?= htmlspecialchars($nickname); ?>">
                 <div class= "invalid" id="invalid_length_nickname">
                     Nickname must be at least 5 characters long
                 </div>
-                <div class= "invalid" id="invalid_taken_nickname">
+                <?php
+                if (isset($nicknameIsValid) && $nicknameIsValid == false) {
+                    echo '<br><span class="invalid-php">Invalid Entry</span><br>';
+                    }
+                ?>
+                <!-- <div class= "invalid" id="invalid_taken_nickname">
                     Nickname is already taken
-                </div>
+                </div> -->
                 
 
                 <label for="password">Password: </label>
@@ -59,6 +103,11 @@
                 <label for="repeat_password">Repeat password: </label>
                 
                 <input type="password" id="repeat_password" name="repeat_password" placeholder="Repeat Password*" required pattern=".{8,}">
+                <?php
+                if ((isset($passwordIsValid ) && $passwordIsValid == false) || (isset($repeatPasswordIsValid) && $repeatPasswordIsValid == false)) {
+                    echo '<br><span class="invalid-php">Invalid Entry</span><br>';
+                    }
+                ?>
                 <div class= "invalid" id="invalid_match_password">
                     Passwords do not match
                 </div>
@@ -69,6 +118,7 @@
 
                 <label for="favorite_type">Favorite type of investment: </label>
                 
+                <!-- not mandatory  -->
                 <select name="favorite_type" id="favorite_type">
                     <option value="not_selected">---------</option>
                     <option value="stocks">Stocks</option>
@@ -84,7 +134,7 @@
                     Please select an option
                 </div>
             
-                <button type="submit" value="Submit">Sign up</button>
+                <button type="submit" name="reg">Sign up</button>
                 <div class= "invalid" id="invalid_form">
                     The form has not been filled out correctly
                 </div>

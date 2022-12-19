@@ -206,6 +206,17 @@ button:hover {
 #invalid_required {
     display: block;
 }
+.invalid-php {
+    border: 2px solid rgb(226, 226, 226);
+    border-radius: 4px;
+    margin: 2px;
+    width: max-content;
+    padding: 1px 6px;
+    text-align: left;
+    color: rgb(226, 226, 226);
+    font-size: 15px;
+    display: block;
+}
 
 /* Media Query */
 @media screen and (max-width: 1080px) {

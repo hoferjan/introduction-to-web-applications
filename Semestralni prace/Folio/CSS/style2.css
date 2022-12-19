@@ -231,6 +231,18 @@ button:hover {
     display: block;
 }
 
+.invalid-php {
+    border: 2px solid rgb(61, 184, 183);
+    border-radius: 4px;
+    margin: 2px;
+    width: max-content;
+    padding: 1px 6px;
+    text-align: left;
+    color: rgb(61, 184, 183);
+    font-size: 15px;
+    display: block;
+}
+
 /* Media Query */
 @media screen and (max-width: 1080px) {
     h1 {
