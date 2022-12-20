@@ -1,3 +1,54 @@
+<?php 
+    require "PHP/validation.php";
+    $formIsSent = isset($_POST["add"]);
+
+    $name = '';
+    $ticker = '';
+    $longShort = '';
+    $date = '';
+    $currency = '';
+    $amount = '';
+    $openPrice = '';
+    $closPrice = '';
+    $privatePublic = '';
+    $type = '';
+
+
+    if ($formIsSent) {
+        $name = $_POST["name"];
+        $ticker = $_POST["ticker"];
+        $longShort = $_POST["long_short"];
+        $date = $_POST["date"];
+        $currency = $_POST["currency"];
+        $amount = $_POST["amount"];
+        $openPrice = $_POST["open_price"];
+        $closPrice = $_POST["clos_price"];
+        $privatePublic = $_POST["private_public"];
+        $type = $_POST["type"];
+
+
+        $nameIsValid = validateName($name);
+        $tickerIsValid = validateTicker($ticker);
+        $longShortIsValid = validateLongShort($longShort);
+        $dateIsValid = validateDate($date);
+        $currencyIsValid = validateCurrency($currency);
+        $amountIsValid = validateAmount($amount);
+        $openPriceIsValid = validatePrice($openPrice);
+        $closPriceIsValid = validatePrice($closPrice);
+        $privatePublicIsValid = validatePrivatePublic($privatePublic);
+        
+
+        if ($nameIsValid && $tickerIsValid && $longShortIsValid && $dateIsValid && $currencyIsValid && $amountIsValid && $openPriceIsValid && $closPriceIsValid && $privatePublicIsValid) {
+            //checks if this exact positino has not already been added
+            //adds position to database connected to the user
+            //adds position to all positions if Public or Anonymous
+            //redirect to mypositions.php with the new position added
+            header("Location: mypositions.php");
+        } else {
+            //shows errors under the input fields
+        }
+    }
+?>
 <!DOCTYPE html> 
 <html lang="en">
     <head>
@@ -143,74 +194,111 @@
 
             </tbody></table>
             </div>
-            <form action="addpos" method="POST">
+            <form action="" method="POST">
                 <h2>Add position</h2>
                 <fieldset>
                     <legend></legend>
 
                     <label for="name">Name: </label>
-                    <input type="text" id="name" name="name" placeholder="Enter Name" required pattern=".{4,}">
+                    <input type="text" id="name" name="name" placeholder="Enter Name" required pattern=".{4,}" value="<?= htmlspecialchars($name); ?>">
+                    <?php
+                    if (isset($nameIsValid) && $nameIsValid == false)  {
+                      echo '<br><span class="invalid-php">Invalid Entry</span><br>';
+                      }
+                    ?>
                     <div class= "invalid" id="invalid_name">
                       Please enter a valid name
                     </div>
 
                     <label for="ticker">Ticker: </label>
-                    <input type="text" id="ticker" name="ticker" placeholder="Enter Ticker" required pattern=".{2,}">
+                    <input type="text" id="ticker" name="ticker" placeholder="Enter Ticker" required pattern=".{2,}" value="<?= htmlspecialchars($ticker); ?>">
+                    <?php
+                    if (isset($tickerIsValid) && $tickerIsValid == false)  {
+                      echo '<br><span class="invalid-php">Invalid Entry</span><br>';
+                      }
+                    ?>
                     <div class= "invalid" id="invalid_ticker">
                       Please enter a valid ticker
                     </div>
 
                     <label for="long_short_select">Long/Short: </label>
-                    
-                    <select name="long_short" id="long_short_select">
-                        <option value="long">Long</option>
-                        <option value="short">Short</option>
+                    <select name="long_short" id="long_short">
+                    <?php if (isset($longShort) && $longShort != '') { ?>
+                        <option value="<?= $longShort ?>"><?= $longShort ?></option>
+                    <?php } ?>
+                        <option value="not_selected"></option>
+                        <option value="long">long</option>
+                        <option value="short">short</option>
                     </select>
-                    
+                    <?php
+                    if (isset($longShortIsValid) && $longShortIsValid == false)  {
+                      echo '<br><span class="invalid-php">Invalid Entry</span><br>';
+                      }
+                    ?>
                     <label for="date">Date: </label>
-                    <input type="date" id="date" name="date" required>
+                    <input type="date" id="date" name="date" required value="<?= htmlspecialchars($date); ?>">
                     
                     <label for="currency_select">Currency: </label>
-                    
-                    <select name="currency" id="currency_select">
-                        <option value="usd">USD</option>
-                        <option value="eur">EUR</option>
-                        <option value="eur">EUR</option>
-                        <option value="gbp">GBP</option>
-                        <option value="czk">CZK</option>
+                    <select name="currency" id="currency_select" required>
+                    <?php if (isset($currency) && $currency != '') { ?>
+                        <option value="<?= $currency ?>"><?= $currency ?></option>
+                    <?php } ?>
+                      <option value="not_selected"></option>
+                      <option value="USD">USD</option>
+                      <option value="EUR">EUR</option>
+                      <option value="gbp">GBP</option>
+                      <option value="czk">CZK</option>
                     </select>
 
                     <label for="amount">Amount: </label>
-                    <input type="number" id="amount" name="amount" placeholder="Enter Amount" required>
+                    <input type="number" id="amount" name="amount" placeholder="Enter Amount" required pattern="[0-9]+" value="<?= htmlspecialchars($amount); ?>">
                     <div class= "invalid" id="invalid_amount">
                       Please enter a valid amount
                     </div>
 
                     <label for="open_price">Opening price: </label>
-                    <input type="number" id="open_price" name="open_price" placeholder="Enter open price" required>
+                    <input type="number" id="open_price" name="open_price" placeholder="Enter open price" required pattern="[0-9]+" value="<?= htmlspecialchars($openPrice); ?>">
                     <div class= "invalid" id="invalid_open_price">
                       Please enter a valid price
                     </div>
 
-                    <label for="close_price">Closing price: </label>
-                    <input type="number" id="close_price" name="close_price" placeholder="Enter close price">
+                    <label for="clos_price">Closing price: </label>
+                    <input type="number" id="clos_price" name="clos_price" placeholder="Enter close price" pattern="[0-9]+"value="<?= htmlspecialchars($closPrice); ?>">
                     <div class= "invalid" id="invalid_close_price">
                       Please enter a valid price
                     </div>
 
                     <label for="private_public_select">Private/Public: </label>
                     <select name="private_public" id="private_public_select">
-                        <option value="private">Private</option>
-                        <option value="public">Public</option>
-                        <option value="anynomous">Anonymous</option>
+                        <?php if (isset($privatePublic) && $privatePublic != '') { ?>
+                            <option value="<?= $privatePublic ?>"><?= $privatePublic ?></option>
+                        <?php } ?>
+                        <option value="private"></option>
+                        <option value="private">private</option>
+                        <option value="public">public</option>
+                        <option value="anynomous">anonymous</option>
                     </select>
                     
-                    <div class="clearfix">
-                        <button type="submit" class="addbtn">Add Position</button>
-                    </div>
-                    <div class= "invalid" id="invalid_required">
-                      All fields are required
-                    </div>
+                  <label for="type_select">Type: </label>
+                  <select name="type" id="type_select">
+                    <?php if (isset($type) && $type != '') { ?>
+                        <option value="<?= $type ?>"><?= $type ?></option>
+                    <?php } ?>
+                    <option value="not_selected"></option>
+                    <option value="stocks">Stocks</option>
+                    <option value="bonds">Bonds</option>
+                    <option value="mutual_funds">Mutual Funds</option>
+                    <option value="real_estate">Real Estate</option>
+                    <option value="cryptocurrencies">Cryptocurrencies</option>
+                    <option value="commodities">Commodities</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <div class="clearfix">
+                    <button type="submit" name="add">Add Position</button>
+                  </div>
+                  <div class= "invalid" id="invalid_required">
+                  All fields are required
+                  </div>
                 </fieldset>
                 
             </form>

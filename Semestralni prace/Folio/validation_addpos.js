@@ -77,7 +77,7 @@ function timerclose_price(e){
 //validation functions
 function validatename(e){
     if (namee.value.length != 0) {
-        if (namee.value.length < 4) {
+        if (namee.value.length < 3) {
             invalid_name.style.display = "block";
         } else {
             invalid_name.style.display = "none";

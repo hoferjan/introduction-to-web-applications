@@ -27,7 +27,6 @@
             //redirect to mypositions.php and logs in user
             header("Location: mypositions.php");
         } else {
-            echo($favorite_type);
             //shows errors under the input fields
         }
     }
@@ -115,12 +114,13 @@
                     Password has to be at least 8 characters long
                 </div>
                 
-
+                <!-- not mandatory  field--> 
                 <label for="favorite_type">Favorite type of investment: </label>
-                
-                <!-- not mandatory  -->
-                <select name="favorite_type" id="favorite_type">
-                    <option value="not_selected">---------</option>
+                <select name="favorite_type" id="favorite_type" >
+                    <?php if (isset($favorite_type)) { ?>
+                        <option value="<?= $favorite_type ?>"><?= $favorite_type ?></option>
+                    <?php } ?>
+                    <option value="not_selected"></option>
                     <option value="stocks">Stocks</option>
                     <option value="bonds">Bonds</option>
                     <option value="mutual_funds">Mutual Funds</option>
