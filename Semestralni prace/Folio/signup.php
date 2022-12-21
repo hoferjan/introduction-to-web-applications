@@ -1,5 +1,7 @@
 <?php 
     require "PHP/validation.php";
+    require "PHP/registration.php";
+
     $formIsSent = isset($_POST["reg"]);
 
     $email = '';
@@ -23,11 +25,17 @@
 
         if ($emailIsValid && $passwordIsValid && $repeatPasswordIsValid && $nicknameIsValid) {
             //checks if email and password are not yet in the database
-            //creates new account in database
+            $user =new RegisterUser($email, $password, $nickname, $favorite_type);
             //redirect to mypositions.php and logs in user
-            header("Location: mypositions.php");
+            if (($user ->usernameExists($nickname) == FALSE) && ($user ->emailExists($user -> email)) == FALSE){
+                header("Location: mypositions.php");
+            } else{
+                //displays error message under sign up button
+                $error = $user->error;
+            }
         } else {
-            //shows errors under the input fields
+            //displays error messages unnder each input field
+
         }
     }
 ?>
@@ -141,6 +149,13 @@
                 <div class= "invalid" id="invalid_required">
                     The fields marked by * are required
                 </div>
+                <?php
+                if (isset($user -> error)) {
+                    echo '<br><span class="invalid-php">' . $user -> error . '</span><br>';
+                    }
+                ?>
+
+                
             </fieldset>
         </form>
         <footer class="footer">
