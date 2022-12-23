@@ -1,5 +1,6 @@
 <?php 
     require "PHP/validation.php";
+    require "PHP/logination.php";
     $formIsSent = isset($_POST["log"]);
 
     $email = '';
@@ -12,15 +13,19 @@
         $emailIsValid = validateEmail($email);
         $passwordIsValid = validatePassword($password);
 
+        // checks if email and password are correct
         if ($emailIsValid && $passwordIsValid) {
-            // checks if email and password are correct
-            //redirect to mypositions.php and logs in user
-            header("Location: mypositions.php");
+            $user = new LoginUser($email, $password);
+           if ($user -> login() == TRUE){
+               //redirect to mypositions.php and logs in user
+               header("Location: mypositions.php");
+              } else{
+                //displays error message under log in button
+              }
         } else {
             //shows errors under the input fields
         }
     }
-
 ?>
 
 <!DOCTYPE html>
@@ -83,6 +88,11 @@
                         <div class="clearfix">
                             <button type="submit" name="log" class="signupbtn">Log in</button>
                         </div>
+                        <?php
+                        if (isset($user -> error)) {
+                            echo '<br><span class="invalid-php">' . $user -> error . '</span><br>';
+                            }
+                        ?>
                     </fieldset>
                 </form>
         </div>

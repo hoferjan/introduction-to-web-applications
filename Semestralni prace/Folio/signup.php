@@ -25,13 +25,12 @@
 
         if ($emailIsValid && $passwordIsValid && $repeatPasswordIsValid && $nicknameIsValid) {
             //checks if email and password are not yet in the database
-            $user =new RegisterUser($email, $password, $nickname, $favorite_type);
+            $user =new RegisterUser($nickname, $password, $repeat_password, $email, $favorite_type);
             //redirect to mypositions.php and logs in user
-            if (($user ->usernameExists($nickname) == FALSE) && ($user ->emailExists($user -> email)) == FALSE){
+            if ($user -> insertUser() == TRUE){
                 header("Location: mypositions.php");
             } else{
                 //displays error message under sign up button
-                $error = $user->error;
             }
         } else {
             //displays error messages unnder each input field
@@ -153,9 +152,10 @@
                 if (isset($user -> error)) {
                     echo '<br><span class="invalid-php">' . $user -> error . '</span><br>';
                     }
+                if (isset($user -> success)) {
+                    echo '<br><span class="invalid-php">' . $user -> success . '</span><br>';
+                    }
                 ?>
-
-                
             </fieldset>
         </form>
         <footer class="footer">
