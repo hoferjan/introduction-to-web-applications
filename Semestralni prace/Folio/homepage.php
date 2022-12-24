@@ -1,15 +1,22 @@
+<?php
+  session_start();
+  if (!isset($_SESSION['css'])) {
+    $_SESSION['css'] = 'CSS/style.css';
+}
+  require "PHP/themeswitcher.php";
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Folio</title>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="<?= $_SESSION["css"] ?>">
     <link rel="stylesheet" href="CSS/print.css" media="print">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="manifest" href="site.webmanifest">
-    <script src="theme_switcher.js" defer></script>
   </head>
   <body id="homepage">
     <div id="page">
@@ -160,7 +167,9 @@
     </div>
       <footer class="footer">
         <div class="copyright">Copyright &copy; 2022 </div>
-        <div><button id="namebutton">J. Hofer</button></div>
+        <form action="" method="POST">
+            <div><button type=submit id="namebutton" name="namebutton">J. Hofer</button></div>
+        </form>
       </footer>
   </body>
 </html>

@@ -1,27 +1,31 @@
 <?php 
-    require "PHP/validation.php";
-    require "PHP/logination.php";
+  session_start();
+  if (!isset($_SESSION['css'])) {
+      $_SESSION['css'] = 'CSS/style.css';
+  }
 
-    session_start();
-    $uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
+  require "PHP/validation.php";
+  require "PHP/logination.php";
+  require "PHP/themeswitcher.php";
 
-    if ($uid) {
-        $user = getUserByUid($uid);
-    } else {
-        header('Location: homepage.php');
-    }
+  $uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
+
+  if ($uid) {
+      $user = getUserByUid($uid);
+  } else {
+      header('Location: homepage.php');
+  }
 ?>
 
-<!DOCTYPE html> <!--tag it like you did on homepage-->
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>All Positions</title>
-        <script src="theme_switcher.js" defer></script>
-        <script src="validation_addpos.js"></script> <!-- here goes js to validate inputs-->
-        <link rel="stylesheet" href="CSS/style.css">
+        <script src="validation_addpos.js"></script>
+        <link rel="stylesheet" href="<?= $_SESSION["css"] ?>">
         <link rel="stylesheet" href="CSS/print.css" media="print">
         <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -172,7 +176,9 @@
         </div>
         <footer class="footer">
           <div class="copyright">Copyright &copy; 2022</div>
-          <div><button id="namebutton">J. Hofer</button></div>
+          <form action="" method="POST">
+            <div><button type=submit id="namebutton" name="namebutton">J. Hofer</button></div>
+          </form>
         </footer>
       </body>
 

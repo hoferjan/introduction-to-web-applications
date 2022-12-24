@@ -1,8 +1,10 @@
 <?php 
+    session_start();
     require "PHP/validation.php";
     require "PHP/logination.php";
-    $formIsSent = isset($_POST["log"]);
+    require "PHP/themeswitcher.php";
 
+    $formIsSent = isset($_POST["log"]);
     $email = '';
     $password = '';
 
@@ -35,10 +37,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Log in</title>
-        <link rel="stylesheet" href="CSS/style.css"> 
+        <link rel="stylesheet" href="<?= $_SESSION["css"] ?>"> 
         <link rel="stylesheet" href="CSS/print.css" media="print">
         <script src="validation_login.js" defer></script>
-        <script src="theme_switcher.js" defer></script>
         <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -98,7 +99,9 @@
         </div>
         <footer class="footer">
             <div class="copyright">Copyright &copy; 2022</div>
-        <div><button id="namebutton">J. Hofer</button></div>
+            <form action="" method="POST">
+            <div><button type=submit id="namebutton" name="namebutton">J. Hofer</button></div>
+            </form>
         </footer>
     </body>
 

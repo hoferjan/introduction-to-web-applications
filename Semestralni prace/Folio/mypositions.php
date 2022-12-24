@@ -1,8 +1,9 @@
 <?php 
+    session_start();
     require "PHP/validation.php";
     require "PHP/logination.php";
+    require "PHP/themeswitcher.php";
 
-    session_start();
     $uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
 
     if ($uid) {
@@ -11,7 +12,6 @@
         header('Location: homepage.php');
     }
     $formIsSent = isset($_POST["add"]);
-
     $name = '';
     $ticker = '';
     $longShort = '';
@@ -68,7 +68,7 @@
         <title>My Positions</title>
         <script src="validation_addpos.js" defer></script> <!-- here goes js to validate inputs-->
         <script src="theme_switcher.js" defer></script>
-        <link rel="stylesheet" href="CSS/style.css"> 
+        <link rel="stylesheet" href="<?= $_SESSION["css"] ?>"> 
         <link rel="stylesheet" href="CSS/print.css" media="print">
         <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -256,8 +256,8 @@
                       <option value="not_selected"></option>
                       <option value="USD">USD</option>
                       <option value="EUR">EUR</option>
-                      <option value="gbp">GBP</option>
-                      <option value="czk">CZK</option>
+                      <option value="GBP">GBP</option>
+                      <option value="CZK">CZK</option>
                     </select>
 
                     <label for="amount">Amount: </label>
@@ -314,7 +314,9 @@
             </form>
         <footer class="footer">
           <div class="copyright">Copyright &copy; 2022</div>
-          <div><button id="namebutton">J. Hofer</button></div>
+          <form action="" method="POST">
+            <div><button type=submit id="namebutton" name="namebutton">J. Hofer</button></div>
+          </form>
         </footer>
       </body>
 
