@@ -16,8 +16,8 @@
         // checks if email and password are correct
         if ($emailIsValid && $passwordIsValid) {
             $user = new LoginUser($email, $password);
-           if ($user -> login() == TRUE){
-               //redirect to mypositions.php and logs in user
+           if ($user -> loginSession() == TRUE){
+               //redirect to mypositions.php and logs in user via session start
                header("Location: mypositions.php");
               } else{
                 //displays error message under log in button

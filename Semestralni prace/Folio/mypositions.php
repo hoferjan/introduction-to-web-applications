@@ -1,5 +1,15 @@
 <?php 
     require "PHP/validation.php";
+    require "PHP/logination.php";
+
+    session_start();
+    $uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
+
+    if ($uid) {
+        $user = getUserByUid($uid);
+    } else {
+        header('Location: homepage.php');
+    }
     $formIsSent = isset($_POST["add"]);
 
     $name = '';
@@ -76,7 +86,7 @@
           <div id="navbar">
               <a href="mypositions.php">My positions</a>
               <a href="allpositions.php">All positions</a>
-              <a href="homepage.php">Logout</a>
+              <a href="PHP/logout.php">Logout</a>
           </div>
         </header>
         <div id="content"> 

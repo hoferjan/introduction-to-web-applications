@@ -24,19 +24,13 @@
         $nicknameIsValid = validateNickname($nickname);
 
         if ($emailIsValid && $passwordIsValid && $repeatPasswordIsValid && $nicknameIsValid) {
-            //checks if email and password are not yet in the database
+            //checks if email and password are not yet in the database, redirect to mypositions.php and logs in user with session start
             $user =new RegisterUser($nickname, $password, $repeat_password, $email, $favorite_type);
-            //redirect to mypositions.php and logs in user
-            if ($user -> insertUser() == TRUE){
-                header("Location: mypositions.php");
-            } else{
-                //displays error message under sign up button
             }
         } else {
-            //displays error messages unnder each input field
+            //displays error messages 
 
         }
-    }
 ?>
 
 <!DOCTYPE html>
