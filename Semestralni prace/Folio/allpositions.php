@@ -7,6 +7,7 @@
   require "PHP/validation.php";
   require "PHP/logination.php";
   require "PHP/themeswitcher.php";
+  require "PHP/loadpositions.php";
 
   $uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
 
@@ -61,7 +62,8 @@
                         <th class="closing_price_head">Closing price</th>
                         <th class="type_head">Type</th>
                     </tr>
-                    <tr class="tcontent">
+                    <!-- Example: -->
+                    <!-- <tr class="tcontent">
                         <td class="user">Slayerx82</td>
                         <td class="name">Apple</td>
                         <td class="ticker">APPL</td>
@@ -73,103 +75,35 @@
                         <td class="closing_price"></td>
                         <td class="type">Stocks</td>
                     </tr>
-                    <tr class="tcontent">
-                      <td class="user">Shadowtrader</td>
-                      <td class="name">Bed Bath & Beyond</td>
-                      <td class="ticker">BBBY</td>
-                      <td class="long_short">Short</td>
-                      <td class="date">12.12.2022</td>
-                      <td class="currency">USD</td>
-                      <td class="amount">500</td>
-                      <td class="opening_price">3.57</td>
-                      <td class="closing_price"></td>
-                      <td class="type">Stocks</td>
-                    </tr>
-                    <tr class="tcontent">
-                      <td class="user">FTXloser</td>
-                      <td class="name">Bitcoin</td>
-                      <td class="ticker">BTC</td>
-                      <td class="long_short">Long</td>
-                      <td class="date">12.12.2022</td>
-                      <td class="currency">USD</td>
-                      <td class="amount">0.132</td>
-                      <td class="opening_price">16432</td>
-                      <td class="closing_price"></td>
-                      <td class="type">Cryptocurrencies</td>
-                    </tr>
-                    <tr class="tcontent">
-                      <td class="user">Anonymous</td>
-                      <td class="name">U.S 10 Zear Treasury Note</td>
-                      <td class="ticker">TMUBMUSD10Y</td>
-                      <td class="long_short">Long</td>
-                      <td class="date">12.12.2022</td>
-                      <td class="currency">USD</td>
-                      <td class="amount">150</td>
-                      <td class="opening_price">3.8</td>
-                      <td class="closing_price">3.9</td>
-                      <td class="type">Bond</td>
-                    </tr>
-                    <tr class="tcontent">
-                      <td class="user">Vlad</td>
-                      <td class="name">Dogecoin</td>
-                      <td class="ticker">DOGEUSD</td>
-                      <td class="long_short">Long</td>
-                      <td class="date">12.12.2022</td>
-                      <td class="currency">USD</td>
-                      <td class="amount">42069</td>
-                      <td class="opening_price">0.08</td>
-                      <td class="closing_price"></td>
-                      <td class="type">Cryptocurrencies</td>
-                    </tr>
-                    <tr class="tcontent">
-                      <td class="user">Sandalealltheway</td>
-                      <td class="name">ČEZ</td>
-                      <td class="ticker">EB CEZ TL09</td>
-                      <td class="long_short">Long</td>
-                      <td class="date">12.12.2022</td>
-                      <td class="currency">CZK</td>
-                      <td class="amount">820</td>
-                      <td class="opening_price">52</td>
-                      <td class="closing_price">74</td>
-                      <td class="type">Stocks</td>
-                    </tr>
-                    <tr class="tcontent">
-                      <td class="user">Goldbug</td>
-                      <td class="name">Gold</td>
-                      <td class="ticker">GOLD</td>
-                      <td class="long_short">Long</td>
-                      <td class="date">12.12.2022</td>
-                      <td class="currency">USD</td>
-                      <td class="amount">3</td>
-                      <td class="opening_price">1841</td>
-                      <td class="closing_price"></td>
-                      <td class="type">Commodities</td>
-                    </tr>
-                    <tr class="tcontent">
-                      <td class="user">michaelburry</td>
-                      <td class="name">Bank Of America</td>
-                      <td class="ticker">BAC</td>
-                      <td class="long_short">Short</td>
-                      <td class="date">12.12.2022</td>
-                      <td class="currency">USD</td>
-                      <td class="amount">100000</td>
-                      <td class="opening_price">90</td>
-                      <td class="closing_price"></td>
-                      <td class="type">Stocks</td>
-                    </tr>
-                    <tr class="tcontent">
-                      <td class="user">Anonymous</td>
-                      <td class="name">Tesla</td>
-                      <td class="ticker">TSLA</td>
-                      <td class="long_short">Long</td>
-                      <td class="date">12.12.2022</td>
-                      <td class="currency">USD</td>
-                      <td class="amount">303</td>
-                      <td class="opening_price">201</td>
-                      <td class="closing_price"></td>
-                      <td class="type">Stocks</td>
-                    </tr>
-    
+                    -->
+                    <?php
+
+                    $positions = json_decode(file_get_contents("JSON/positions.json"), true);
+
+                    foreach ($positions as $position) {
+                      // check if the position is not set to private
+                      // or if the position's user ID matches the session user ID
+                      if ($position['private_public'] != "private" || $position['uid'] == $_SESSION['uid']) {
+                          echo "<tr class='tcontent'>";
+                          if ($position['private_public'] == 'anonymous') {
+                              echo "<td class='user'>anonymous</td>";
+                          } else {
+                            echo "<td class='user'>" . getUserByUid($position['uid'])["username"] . "</td>";
+                          }
+                          echo "<td class='name'>" . $position['name'] . "</td>";
+                          echo "<td class='ticker'>" . $position['ticker'] . "</td>";
+                          echo "<td class='long_short'>" . $position['long_short'] . "</td>";
+                          echo "<td class='date'>" . $position['date'] . "</td>";
+                          echo "<td class='currency'>" . $position['currency'] . "</td>";
+                          echo "<td class='amount'>" . $position['amount'] . "</td>";
+                          echo "<td class='opening_price'>" . $position['opening_price'] . "</td>";
+                          echo "<td class='closing_price'>" . $position['closing_price'] . "</td>";
+                          echo "<td class='type'>" . $position['type'] . "</td>";
+                          echo "</tr>";
+                      }
+                  }
+                    
+                    ?>
                 </tbody>
               </table>
           </div>

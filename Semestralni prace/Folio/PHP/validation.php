@@ -27,11 +27,11 @@
 
 // Added position validation
         function validateName($name) {
-            return strlen($name) >= 3;
+            return ((strlen($name) >= 3) && (strlen($name) <= 15));
         }
 
         function validateTicker($ticker) {
-            return strlen($ticker) >= 2;
+            return ((strlen($ticker) >= 2) && (strlen($ticker) <= 10));
         }
 
         function validateLongShort($longShort) {
