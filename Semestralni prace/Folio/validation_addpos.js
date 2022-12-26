@@ -106,6 +106,7 @@ function validateticker(e){
 
 function validateamount(e){
     if (amount.value.length != 0) {
+        console.log(amount.value)
         if (amount.value < 1) {
             invalid_amount.style.display = "block";
         } else {

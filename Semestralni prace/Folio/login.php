@@ -1,5 +1,8 @@
 <?php 
     session_start();
+    if (!isset($_SESSION['css'])) {
+        $_SESSION['css'] = 'CSS/style.css';
+    }
     require "PHP/validation.php";
     require "PHP/logination.php";
     require "PHP/themeswitcher.php";

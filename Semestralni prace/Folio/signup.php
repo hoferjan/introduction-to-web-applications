@@ -31,9 +31,6 @@
             //checks if email and password are not yet in the database, redirect to mypositions.php and logs in user with session start
             $user =new RegisterUser($nickname, $password, $repeat_password, $email, $favorite_type);
             }
-        } else {
-            //displays error messages 
-
         }
 ?>
 

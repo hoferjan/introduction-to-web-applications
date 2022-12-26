@@ -3,14 +3,17 @@
     require "PHP/validation.php";
     require "PHP/logination.php";
     require "PHP/themeswitcher.php";
+    require "PHP/addposition.php";
 
     $uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
 
+    //sends to homepage if not logged in
     if ($uid) {
         $user = getUserByUid($uid);
     } else {
         header('Location: homepage.php');
     }
+
     $formIsSent = isset($_POST["add"]);
     $name = '';
     $ticker = '';
@@ -19,12 +22,11 @@
     $currency = '';
     $amount = '';
     $openPrice = '';
-    $closPrice = '';
+    $closePrice = '';
     $privatePublic = '';
     $type = '';
 
-
-    if ($formIsSent) {
+    if ($formIsSent){
         $name = $_POST["name"];
         $ticker = $_POST["ticker"];
         $longShort = $_POST["long_short"];
@@ -32,10 +34,9 @@
         $currency = $_POST["currency"];
         $amount = $_POST["amount"];
         $openPrice = $_POST["open_price"];
-        $closPrice = $_POST["clos_price"];
+        $closePrice = $_POST["close_price"];
         $privatePublic = $_POST["private_public"];
         $type = $_POST["type"];
-
 
         $nameIsValid = validateName($name);
         $tickerIsValid = validateTicker($ticker);
@@ -44,20 +45,16 @@
         $currencyIsValid = validateCurrency($currency);
         $amountIsValid = validateAmount($amount);
         $openPriceIsValid = validatePrice($openPrice);
-        $closPriceIsValid = validatePrice($closPrice);
+        $closePriceIsValid = validatePrice($closePrice);
         $privatePublicIsValid = validatePrivatePublic($privatePublic);
-        
 
-        if ($nameIsValid && $tickerIsValid && $longShortIsValid && $dateIsValid && $currencyIsValid && $amountIsValid && $openPriceIsValid && $closPriceIsValid && $privatePublicIsValid) {
-            //checks if this exact positino has not already been added
-            //adds position to database connected to the user
-            //adds position to all positions if Public or Anonymous
-            //redirect to mypositions.php with the new position added
-            header("Location: mypositions.php");
-        } else {
-            //shows errors under the input fields
-        }
-    }
+        if ($nameIsValid && $tickerIsValid && $longShortIsValid && $dateIsValid && $currencyIsValid && $amountIsValid && $openPriceIsValid && $closePriceIsValid && $privatePublicIsValid) {
+            $position = new AddPosition($name, $ticker, $longShort, $date, $currency, $amount, $openPrice, $closePrice, $privatePublic);
+            //to reload the page to get new positions which were added
+            // header('Location: mypositions.php');
+        
+          }
+  }
 ?>
 <!DOCTYPE html> 
 <html lang="en">
@@ -66,7 +63,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>My Positions</title>
-        <script src="validation_addpos.js" defer></script> <!-- here goes js to validate inputs-->
+        <script src="validation_addpos.js" defer></script>
         <script src="theme_switcher.js" defer></script>
         <link rel="stylesheet" href="<?= $_SESSION["css"] ?>"> 
         <link rel="stylesheet" href="CSS/print.css" media="print">
@@ -210,7 +207,7 @@
                     <legend></legend>
 
                     <label for="name">Name: </label>
-                    <input type="text" id="name" name="name" placeholder="Enter Name" required pattern=".{4,}" value="<?= htmlspecialchars($name); ?>">
+                    <input type="text" id="name" name="name" placeholder="Enter Name" required pattern=".{3,}" value="<?= htmlspecialchars($name); ?>">
                     <?php
                     if (isset($nameIsValid) && $nameIsValid == false)  {
                       echo '<br><span class="invalid-php">Invalid Entry</span><br>';
@@ -272,8 +269,8 @@
                       Please enter a valid price
                     </div>
 
-                    <label for="clos_price">Closing price: </label>
-                    <input type="number" id="clos_price" name="clos_price" placeholder="Enter close price" pattern="[0-9]+"value="<?= htmlspecialchars($closPrice); ?>">
+                    <label for="close_price">Closing price: </label>
+                    <input type="number" id="close_price" name="close_price" placeholder="Enter close price" pattern="[0-9]+"value="<?= htmlspecialchars($closPrice); ?>">
                     <div class= "invalid" id="invalid_close_price">
                       Please enter a valid price
                     </div>
@@ -307,8 +304,16 @@
                     <button type="submit" name="add">Add Position</button>
                   </div>
                   <div class= "invalid" id="invalid_required">
-                  All fields are required
+                  All fields are required, but closing price is optional
                   </div>
+                  <?php
+                  if (isset($position -> error)) {
+                      echo '<br><span class="invalid-php">' . $position -> error . '</span><br>';
+                      }
+                  if (isset($position -> success)) {
+                      echo '<br><span class="invalid-php">' . $position -> success . '</span><br>';
+                      }
+                  ?>
                 </fieldset>
                 
             </form>
