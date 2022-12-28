@@ -16,22 +16,18 @@
         $email = $_POST["email"];
         $password = $_POST["password"];
 
-        $emailIsValid = validateEmail($email);
-        $passwordIsValid = validatePassword($password);
-
-        // checks if email and password are correct
-        if ($emailIsValid && $passwordIsValid) {
-            $user = new LoginUser($email, $password);
-           if ($user -> loginSession() == TRUE){
-               //redirect to mypositions.php and logs in user via session start
-               header("Location: mypositions.php");
-              } else{
-                //displays error message under log in button
-              }
-        } else {
-            //shows errors under the input fields
-        }
+    // checks if email and password are correct
+        $user = new LoginUser($email, $password);
+        if ($user -> loginSession() == TRUE){
+            //redirect to mypositions.php and logs in user via session start
+            header("Location: mypositions.php");
+            } else{
+            //displays error message under log in button
+            }
+    } else {
+        //shows errors under the input fields
     }
+
 ?>
 
 <!DOCTYPE html>
