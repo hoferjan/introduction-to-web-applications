@@ -1,4 +1,5 @@
 <?php
+global $error;
 //Login and registration validation
     //email validation
     function validateEmail($email) {
@@ -32,6 +33,7 @@
 
         function validateTicker($ticker) {
             return ((strlen($ticker) >= 2) && (strlen($ticker) <= 10));
+
         }
 
         function validateLongShort($longShort) {
@@ -39,7 +41,13 @@
         }
 
         function validateDate($date) {
-            return strlen($date) > 0;
+            $maxTime = time() + (60*60*24); //24 hours in the future
+            if((strlen($date) > 0) && (strtotime($date) < $maxTime)){
+                return true;
+            } else {
+                $error = "Please enter a valid date";
+                return false;
+            }
         }
 
         function validateCurrency($currency) {

@@ -21,7 +21,7 @@
   <body id="homepage">
     <div id="page">
       <header class="group">
-        <a href="homepage.php">
+        <a href="mypositions.php">
             <img
             alt="folio_logo"
             src="folio-logo_blue-removebgx250.png"

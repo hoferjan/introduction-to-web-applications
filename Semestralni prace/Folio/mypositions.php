@@ -25,6 +25,7 @@
     $closePrice = '';
     $privatePublic = '';
     $type = '';
+    global $error;
 
     if ($formIsSent){
         $name = $_POST["name"];
@@ -38,22 +39,12 @@
         $privatePublic = $_POST["private_public"];
         $type = $_POST["type"];
 
-        $nameIsValid = validateName($name);
-        $tickerIsValid = validateTicker($ticker);
-        $longShortIsValid = validateLongShort($longShort);
-        $dateIsValid = validateDate($date);
-        $currencyIsValid = validateCurrency($currency);
-        $amountIsValid = validateAmount($amount);
-        $openPriceIsValid = validatePrice($openPrice);
-        $privatePublicIsValid = validatePrivatePublic($privatePublic);
-
-        if ($nameIsValid && $tickerIsValid && $longShortIsValid && $dateIsValid && $currencyIsValid && $amountIsValid && $openPriceIsValid && $privatePublicIsValid) {
-            $position = new AddPosition($name, $ticker, $longShort, $privatePublic, $date, $currency, $amount, $openPrice, $closePrice, $type);
-            //to reload the page to get new positions which were added
-            // header('Location: mypositions.php');
+        $newPosition = new AddPosition($name, $ticker, $longShort, $privatePublic, $date, $currency, $amount, $openPrice, $closePrice, $type);
+        //to reload the page to get new positions which were added
+        // header('Location: mypositions.php');
         
           }
-  }
+  
 ?>
 <!DOCTYPE html> 
 <html lang="en">
@@ -119,7 +110,7 @@
                   echo "<tr class='tcontent'>";
                   echo "<td class='name'>" . $position['name'] . "</td>";
                   echo "<td class='ticker'>" . $position['ticker'] . "</td>";
-                  echo "<td class='long_short'>" . $position['long_short'] . "</td>";
+                  echo "<td class='long_short'>" . $position['longShort'] . "</td>";
                   echo "<td class='date'>" . $position['date'] . "</td>";
                   echo "<td class='currency'>" . $position['currency'] . "</td>";
                   echo "<td class='amount'>" . $position['amount'] . "</td>";
@@ -176,7 +167,7 @@
                     ?>
                     <label for="date">Date: </label>
                     <input type="date" id="date" name="date" required value="<?= htmlspecialchars($date); ?>">
-                    
+
                     <label for="currency_select">Currency: </label>
                     <select name="currency" id="currency_select" required>
                     <?php if (isset($currency) && $currency != '') { ?>
@@ -239,11 +230,11 @@
                   All fields are required, but closing price is optional
                   </div>
                   <?php
-                  if (isset($position -> error)) {
-                      echo '<br><span class="invalid-php">' . $position -> error . '</span><br>';
+                  if (isset($newPosition -> error)) {
+                      echo '<br><span class="invalid-php">' . $newPosition -> error . '</span><br>';
                       }
-                  if (isset($position -> success)) {
-                      echo '<br><span class="invalid-php">' . $position -> success . '</span><br>';
+                  if (isset($newPosition -> success)) {
+                      echo '<br><span class="invalid-php">' . $newPosition -> success . '</span><br>';
                       }
                   ?>
                 </fieldset>
