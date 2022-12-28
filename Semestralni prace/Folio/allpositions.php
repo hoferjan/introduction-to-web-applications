@@ -102,9 +102,6 @@
                     -->
                     <?php
                     foreach ($additionalPositions as $position) {
-                      // check if the position is not set to private
-                      // or if the position's user ID matches the session user ID
-                      if ($position['private_public'] != "private" || $position['uid'] == $_SESSION['uid']) {
                           echo "<tr class='tcontent'>";
                           if ($position['private_public'] == 'anonymous') {
                               echo "<td class='user'>anonymous</td>";
@@ -122,7 +119,7 @@
                           echo "<td class='type'>" . $position['type'] . "</td>";
                           echo "</tr>";
                       }
-                  }
+                  
                     
                     ?>
                 </tbody>
@@ -131,7 +128,7 @@
           <div id="pagination">
           <form action="allpositions.php" method="POST">
               <!-- Display the "load more" button only if there are additional positions to load -->
-              <?php if ($page * 20 < count($positions)) { ?>
+              <?php if ($page * 20 < count($filteredPositions)) { ?>
               <button type="submit" id="load-more-btn">Load more</button>
               <?php } ?>
               <!-- Add a hidden input field to store the current page number -->

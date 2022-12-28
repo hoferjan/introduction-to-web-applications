@@ -39,11 +39,32 @@
         $type = $_POST["type"];
 
         $newPosition = new AddPosition($name, $ticker, $longShort, $privatePublic, $date, $currency, $amount, $openPrice, $closePrice, $type);
-        //to reload the page to get new positions which were added
-        // header('Location: mypositions.php');
-        
-          }
+       }
   
+        // Load the positions from the JSON file
+  $positions = json_decode(file_get_contents('JSON/positions.json'), true);
+
+
+  //get only the positions which are not set to private or the user is the owner
+  $filteredPositions = [];
+  foreach ($positions as $position) {
+    if ($position['uid'] == $_SESSION['uid']) {
+          //push position to filteredPositions
+          array_push($filteredPositions, $position);
+      }
+  }
+
+  // Set the default page number
+  $page = 1;
+
+  // Check if the form has been submitted
+  if (isset($_POST['page'])) {
+    // Set the page number and offset from the form submission
+    $page = (int) $_POST['page'];
+  }
+
+  // Retrieve the additional positions from the array
+  $additionalPositions = array_slice($filteredPositions, 0,$page * 20); 
 ?>
 <!DOCTYPE html> 
 <html lang="en">
@@ -101,11 +122,8 @@
                 </tr> -->
 
           <?php
-          $positions = json_decode(file_get_contents("JSON/positions.json"), true);
-          
-          foreach ($positions as $position) {
+          foreach ($additionalPositions as $position) {
               // check if the position's user ID matches the session user ID
-              if ($position['uid'] == $_SESSION['uid']) {
                   echo "<tr class='tcontent'>";
                   echo "<td class='name'>" . $position['name'] . "</td>";
                   echo "<td class='ticker'>" . $position['ticker'] . "</td>";
@@ -117,12 +135,21 @@
                   echo "<td class='closing_price'>" . $position['closing_price'] . "</td>";
                   echo "<td class='type'>" . $position['type'] . "</td>";
                   echo "</tr>";
-              }
           }
           ?>
           
             </tbody></table>
             </div>
+      <div id="pagination">
+          <form action="mypositions.php" method="POST">
+              <!-- Display the "load more" button only if there are additional positions to load -->
+              <?php if ($page * 20 < count($filteredPositions)) { ?>
+              <button type="submit" id="load-more-btn">Load more</button>
+              <?php } ?>
+              <!-- Add a hidden input field to store the current page number -->
+              <input type="hidden" name="page" id="page" value="<?= $page + 1 ?>">
+          </form>
+      </div>
             <form action="" method="POST">
                 <h2>Add position</h2>
                 <fieldset>

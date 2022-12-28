@@ -1,5 +1,5 @@
 //queryselector variables and invalid element messages
-const formElement = document.querySelector("form");
+const formElement = document.querySelector("form:nth-of-type(2)");
 formElement.addEventListener("submit", validateall);
 
 // query selector
