@@ -1,6 +1,5 @@
 <?php 
     session_start();
-    require "PHP/validation.php";
     require "PHP/logination.php";
     require "PHP/themeswitcher.php";
     require "PHP/addposition.php";

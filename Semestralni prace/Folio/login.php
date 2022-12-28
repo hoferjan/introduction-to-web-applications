@@ -3,13 +3,14 @@
     if (!isset($_SESSION['css'])) {
         $_SESSION['css'] = 'CSS/style.css';
     }
-    require "PHP/validation.php";
+    
     require "PHP/logination.php";
     require "PHP/themeswitcher.php";
 
     $formIsSent = isset($_POST["log"]);
     $email = '';
     $password = '';
+    $password2 = '';
 
     if ($formIsSent) {
         $email = $_POST["email"];

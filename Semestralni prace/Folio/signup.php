@@ -3,7 +3,6 @@
     if (!isset($_SESSION['css'])) {
         $_SESSION['css'] = 'CSS/style.css';
     }
-    require "PHP/validation.php";
     require "PHP/registration.php";
     require "PHP/themeswitcher.php";
     
@@ -21,16 +20,9 @@
         $nickname = $_POST["nickname"];
         $favorite_type = $_POST["favorite_type"];
 
-
-        $emailIsValid = validateEmail($email);
-        $passwordIsValid = validatePassword($password);
-        $repeatPasswordIsValid = validateRepeatPassword($repeat_password, $password);
-        $nicknameIsValid = validateNickname($nickname);
-
-        if ($emailIsValid && $passwordIsValid && $repeatPasswordIsValid && $nicknameIsValid) {
-            //checks if email and password are not yet in the database, redirect to mypositions.php and logs in user with session start
-            $user =new RegisterUser($nickname, $password, $repeat_password, $email, $favorite_type);
-            }
+        //checks if email and password are not yet in the database, redirect to mypositions.php and logs in user with session start
+        $user =new RegisterUser($nickname, $password, $repeat_password, $email, $favorite_type);
+            
         }
 ?>
 

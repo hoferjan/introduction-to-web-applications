@@ -4,7 +4,6 @@
       $_SESSION['css'] = 'CSS/style.css';
   }
 
-  require "PHP/validation.php";
   require "PHP/logination.php";
   require "PHP/themeswitcher.php";
   require "PHP/loadpositions.php";
@@ -92,7 +91,7 @@
                           }
                           echo "<td class='name'>" . $position['name'] . "</td>";
                           echo "<td class='ticker'>" . $position['ticker'] . "</td>";
-                          echo "<td class='long_short'>" . $position['long_short'] . "</td>";
+                          echo "<td class='long_short'>" . $position['longShort'] . "</td>";
                           echo "<td class='date'>" . $position['date'] . "</td>";
                           echo "<td class='currency'>" . $position['currency'] . "</td>";
                           echo "<td class='amount'>" . $position['amount'] . "</td>";
