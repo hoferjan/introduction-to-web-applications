@@ -63,6 +63,7 @@
     // Set the page number and offset from the form submission
     $page = (int) $_POST['page'];
   }
+  
   // Check if the type form has been submitted
   if (isset($_POST['type']) && $_POST['type'] != "all") {
     // Get the type selected by the user
@@ -179,7 +180,12 @@
               <?php } ?>
               <!-- Add a hidden input field to store the current page number -->
               <input type="hidden" name="page" id="page" value="<?= $page + 1 ?>">
+              <?php if (isset($type)) { ?>
               <input type="hidden" name="type" id="type" value="<?= $type ?>">
+              <?php } ?>
+              <?php if (isset($sort)) { ?>
+              <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
+              <?php } ?>
           </form>
       </div>
             <form action="" method="POST">

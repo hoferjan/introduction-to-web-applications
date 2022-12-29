@@ -8,8 +8,9 @@
   require "PHP/themeswitcher.php";
   require "PHP/loadpositions.php";
   require "PHP/filterpositions.php";
+  require "PHP/sortpositions.php";
 
-  $refilteredPositions = [];
+  
   $filteredPositions = [];
 
   $uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
@@ -52,18 +53,27 @@
     $type = $_POST['type'];
 
     // Filter the positions by type
+    $refilteredPositions = [];
     $refilteredPositions = filterPositionsByType($type, $filteredPositions);
   }
 
   // if user did not filter positions, set the filtered positions to the prefiltered positions
-  if ($refilteredPositions == [] || !isset($refilteredPositions)) {
+  if (!isset($refilteredPositions)) {
     $refilteredPositions = $filteredPositions;
   }
 
-  // Retrieve the additional positions from the array
-  $additionalPositions = array_slice($refilteredPositions, 0,$page * 20);
 
 
+  // Check if the sort form has been submitted
+  if (isset($_POST['sort'])) {
+    // Get the sort selected by the user
+    $sort = $_POST['sort'];
+
+    // Sort the positions by the selected sort
+    $refilteredPositions = sortPositions($refilteredPositions, $sort);
+  }
+    // Retrieve the additional positions from the array
+    $additionalPositions = array_slice($refilteredPositions, 0,$page * 20);
 ?>
 
 <!DOCTYPE html>
@@ -110,6 +120,24 @@
             <option value="commodities">Commodities</option>
             <option value="other">Other</option>
           </select>
+          <?php if (isset($sort)) { ?>
+            <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
+          <?php } ?>
+        </form>
+        <form method="post" action="">
+          <label for="sort">Sort by:</label>
+          <select name="sort" id="sort" onchange="this.form.submit()">
+          <?php if (isset($sort)) { ?>
+            <option value="<?= $sort ?>"><?= $sort ?></option>
+          <?php } ?>
+            <option value="highest_price">Highest opening price</option>
+            <option value="lowest_price">Lowest opening price</option>
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+          </select>
+          <?php if (isset($type)) { ?>
+            <input type="hidden" name="type" id="type" value="<?= $type ?>">
+          <?php } ?>
         </form>
             <div id="table">
                 <table>
@@ -172,7 +200,12 @@
               <?php } ?>
               <!-- Add a hidden input field to store the current page number -->
               <input type="hidden" name="page" id="page" value="<?= $page + 1 ?>">
+              <?php if (isset($type)) { ?>
               <input type="hidden" name="type" id="type" value="<?= $type ?>">
+              <?php } ?>
+              <?php if (isset($sort)) { ?>
+              <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
+              <?php } ?>
           </form>
       </div>
         </div>
