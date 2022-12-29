@@ -41,11 +41,7 @@
   if (isset($_POST['page'])) {
     // Set the page number and offset from the form submission
     $page = (int) $_POST['page'];
-    if (isset($_POST['type']) && $_POST['type'] != "all") {
-      // Get the type selected by the user
-      $type = $_POST['type'];
     }
-  }
 
   // Check if the type form has been submitted
   if (isset($_POST['type']) && $_POST['type'] != "all") {
@@ -61,8 +57,6 @@
   if (!isset($refilteredPositions)) {
     $refilteredPositions = $filteredPositions;
   }
-
-
 
   // Check if the sort form has been submitted
   if (isset($_POST['sort'])) {
@@ -153,20 +147,6 @@
                         <th class="closing_price_head">Closing price</th>
                         <th class="type_head">Type</th>
                     </tr>
-                    <!-- Example: -->
-                    <!-- <tr class="tcontent">
-                        <td class="user">Slayerx82</td>
-                        <td class="name">Apple</td>
-                        <td class="ticker">APPL</td>
-                        <td class="long_short">Long</td>
-                        <td class="date">12.12.2022</td>
-                        <td class="currency">USD</td>
-                        <td class="amount">52</td>
-                        <td class="opening_price">148.21</td>
-                        <td class="closing_price"></td>
-                        <td class="type">Stocks</td>
-                    </tr>
-                    -->
                     <?php
                     foreach ($additionalPositions as $position) {
                           echo "<tr class='tcontent'>";
@@ -186,8 +166,6 @@
                           echo "<td class='type'>" . $position['type'] . "</td>";
                           echo "</tr>";
                       }
-                  
-                    
                     ?>
                 </tbody>
               </table>

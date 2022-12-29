@@ -4,6 +4,7 @@
     require "PHP/themeswitcher.php";
     require "PHP/addposition.php";
     require "PHP/filterpositions.php";
+    require "PHP/sortpositions.php";
 
     $uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
 
@@ -79,6 +80,15 @@
     $refilteredPositions = $filteredPositions;
   }
 
+    // Check if the sort form has been submitted
+    if (isset($_POST['sort'])) {
+      // Get the sort selected by the user
+      $sort = $_POST['sort'];
+  
+      // Sort the positions by the selected sort
+      $refilteredPositions = sortPositions($refilteredPositions, $sort);
+    }
+
   // Retrieve the additional positions from the array
   $additionalPositions = array_slice($refilteredPositions, 0,$page * 20);
 ?>
@@ -128,6 +138,24 @@
             <option value="commodities">Commodities</option>
             <option value="other">Other</option>
           </select>
+          <?php if (isset($sort)) { ?>
+            <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
+          <?php } ?>
+        </form>
+        <form method="post" action="">
+          <label for="sort">Sort by:</label>
+          <select name="sort" id="sort" onchange="this.form.submit()">
+          <?php if (isset($sort)) { ?>
+            <option value="<?= $sort ?>"><?= $sort ?></option>
+          <?php } ?>
+            <option value="highest_price">Highest opening price</option>
+            <option value="lowest_price">Lowest opening price</option>
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+          </select>
+          <?php if (isset($type)) { ?>
+            <input type="hidden" name="type" id="type" value="<?= $type ?>">
+          <?php } ?>
         </form>
             <table>
                 <tbody><tr class="thead">
@@ -141,18 +169,6 @@
                     <th class="closing_price_head">Closing price</th>
                     <th class="type_head">Type</th>
                 </tr>
-                <!-- <tr class="tcontent">
-                    <td class="name">Apple</td>
-                    <td class="ticker">APPL</td>
-                    <td class="long_short">Long</td>
-                    <td class="date">12.12.2022</td>
-                    <td class="currency">USD</td>
-                    <td class="amount">52</td>
-                    <td class="opening_price">148.21</td>
-                    <td class="closing_price"></td>
-                    <td class="type">Stocks</td>
-                </tr> -->
-
           <?php
           foreach ($additionalPositions as $position) {
               // check if the position's user ID matches the session user ID
