@@ -3,6 +3,7 @@
     require "PHP/logination.php";
     require "PHP/themeswitcher.php";
     require "PHP/addposition.php";
+    require "PHP/filterpositions.php";
 
     $uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
 
@@ -46,7 +47,6 @@
 
 
   //get only the positions which are not set to private or the user is the owner
-  $refilteredPositions = [];
   $filteredPositions = [];
   foreach ($positions as $position) {
     if ($position['uid'] == $_SESSION['uid']) {
@@ -58,14 +58,28 @@
   // Set the default page number
   $page = 1;
 
-  // Check if the form has been submitted
+  // Check if the page form has been submitted
   if (isset($_POST['page'])) {
     // Set the page number and offset from the form submission
     $page = (int) $_POST['page'];
   }
+  // Check if the type form has been submitted
+  if (isset($_POST['type']) && $_POST['type'] != "all") {
+    // Get the type selected by the user
+    $type = $_POST['type'];
+
+    // Filter the positions by type
+    $refilteredPositions = [];
+    $refilteredPositions = filterPositionsByType($type, $filteredPositions);
+  }
+
+  // if user did not filter positions, set the filtered positions to the prefiltered positions
+  if (!isset($refilteredPositions)) {
+    $refilteredPositions = $filteredPositions;
+  }
 
   // Retrieve the additional positions from the array
-  $additionalPositions = array_slice($filteredPositions, 0,$page * 20); 
+  $additionalPositions = array_slice($refilteredPositions, 0,$page * 20);
 ?>
 <!DOCTYPE html> 
 <html lang="en">
@@ -98,6 +112,22 @@
           </div>
         </header>
         <div id="content"> 
+        <form method="post" action="">
+          <label for="type">Filter by type:</label>
+          <select name="type" id="type" onchange="this.form.submit()">
+          <?php if (isset($type)) { ?>
+            <option value="<?= $type ?>"><?= $type ?></option>
+          <?php } ?>
+            <option value="all">All</option>
+            <option value="stocks">Stocks</option>
+            <option value="bonds">Bonds</option>
+            <option value="mutual_funds">Mutual Funds</option>
+            <option value="real_estate">Real Estate</option>
+            <option value="cryptocurrencies">Cryptocurrencies</option>
+            <option value="commodities">Commodities</option>
+            <option value="other">Other</option>
+          </select>
+        </form>
             <table>
                 <tbody><tr class="thead">
                     <th class="name_head">Name</th>
@@ -144,11 +174,12 @@
       <div id="pagination">
           <form action="mypositions.php" method="POST">
               <!-- Display the "load more" button only if there are additional positions to load -->
-              <?php if ($page * 20 < count($filteredPositions)) { ?>
+              <?php if ($page * 20 < count($refilteredPositions)) { ?>
               <button type="submit" id="load-more-btn">Load more</button>
               <?php } ?>
               <!-- Add a hidden input field to store the current page number -->
               <input type="hidden" name="page" id="page" value="<?= $page + 1 ?>">
+              <input type="hidden" name="type" id="type" value="<?= $type ?>">
           </form>
       </div>
             <form action="" method="POST">

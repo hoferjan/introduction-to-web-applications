@@ -14,6 +14,7 @@
 
   $uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
 
+  //sends to homepage if user is not logged in
   if ($uid) {
       $user = getUserByUid($uid);
   } else {
@@ -25,8 +26,6 @@
 
 
   //get only the positions which are not set to private or the user is the owner
-  global $filteredPositions;
-  $filteredPositions = [];
   foreach ($positions as $position) {
     if ($position['private_public'] != "private" || $position['uid'] == $_SESSION['uid']) {
           //push position to filteredPositions
