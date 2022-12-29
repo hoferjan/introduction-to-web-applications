@@ -7,6 +7,10 @@
   require "PHP/logination.php";
   require "PHP/themeswitcher.php";
   require "PHP/loadpositions.php";
+  require "PHP/filterpositions.php";
+
+  $refilteredPositions = [];
+  $filteredPositions = [];
 
   $uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
 
@@ -21,6 +25,7 @@
 
 
   //get only the positions which are not set to private or the user is the owner
+  global $filteredPositions;
   $filteredPositions = [];
   foreach ($positions as $position) {
     if ($position['private_public'] != "private" || $position['uid'] == $_SESSION['uid']) {
@@ -32,14 +37,34 @@
   // Set the default page number
   $page = 1;
 
-  // Check if the form has been submitted
+  // Check if the page form has been submitted
   if (isset($_POST['page'])) {
     // Set the page number and offset from the form submission
     $page = (int) $_POST['page'];
+    if (isset($_POST['type']) && $_POST['type'] != "all") {
+      // Get the type selected by the user
+      $type = $_POST['type'];
+    }
+  }
+
+  // Check if the type form has been submitted
+  if (isset($_POST['type']) && $_POST['type'] != "all") {
+    // Get the type selected by the user
+    $type = $_POST['type'];
+
+    // Filter the positions by type
+    $refilteredPositions = filterPositionsByType($type, $filteredPositions);
+  }
+
+  // if user did not filter positions, set the filtered positions to the prefiltered positions
+  if ($refilteredPositions == [] || !isset($refilteredPositions)) {
+    $refilteredPositions = $filteredPositions;
   }
 
   // Retrieve the additional positions from the array
-  $additionalPositions = array_slice($filteredPositions, 0,$page * 20);
+  $additionalPositions = array_slice($refilteredPositions, 0,$page * 20);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +74,6 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>All Positions</title>
-        <script src="validation_addpos.js"></script>
         <link rel="stylesheet" href="<?= $_SESSION["css"] ?>">
         <link rel="stylesheet" href="CSS/print.css" media="print">
         <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -72,6 +96,22 @@
           </div>
         </header>
         <div id="content">
+        <form method="post" action="">
+          <label for="type">Filter by type:</label>
+          <select name="type" id="type" onchange="this.form.submit()">
+          <?php if (isset($type)) { ?>
+            <option value="<?= $type ?>"><?= $type ?></option>
+          <?php } ?>
+            <option value="all">All</option>
+            <option value="stocks">Stocks</option>
+            <option value="bonds">Bonds</option>
+            <option value="mutual_funds">Mutual Funds</option>
+            <option value="real_estate">Real Estate</option>
+            <option value="cryptocurrencies">Cryptocurrencies</option>
+            <option value="commodities">Commodities</option>
+            <option value="other">Other</option>
+          </select>
+        </form>
             <div id="table">
                 <table>
                     <tbody><tr class="thead">
@@ -126,13 +166,14 @@
               </table>
           </div>
           <div id="pagination">
-          <form action="allpositions.php" method="POST">
+          <form action="" method="POST">
               <!-- Display the "load more" button only if there are additional positions to load -->
-              <?php if ($page * 20 < count($filteredPositions)) { ?>
+              <?php if ($page * 20 < count($refilteredPositions)) { ?>
               <button type="submit" id="load-more-btn">Load more</button>
               <?php } ?>
               <!-- Add a hidden input field to store the current page number -->
               <input type="hidden" name="page" id="page" value="<?= $page + 1 ?>">
+              <input type="hidden" name="type" id="type" value="<?= $type ?>">
           </form>
       </div>
         </div>

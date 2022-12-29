@@ -46,6 +46,7 @@
 
 
   //get only the positions which are not set to private or the user is the owner
+  $refilteredPositions = [];
   $filteredPositions = [];
   foreach ($positions as $position) {
     if ($position['uid'] == $_SESSION['uid']) {
