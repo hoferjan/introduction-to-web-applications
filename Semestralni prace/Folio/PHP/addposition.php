@@ -59,7 +59,7 @@
             if ((strlen($this -> name) >= 3) && (strlen($this ->name) <= 15)){
                 return true;
             } else {
-                $this->error = "Please enter a valid name";
+                $this->error = "Please enter a valid name, lenght between 3 and 15";
                 return false;
             };
         }
@@ -68,7 +68,7 @@
              if((strlen($this->ticker) >= 2) && (strlen($this->ticker) <= 10)){
                 return true;
             } else {
-                $this->error = "Please enter a valid ticker";
+                $this->error = "Please enter a valid ticker, lenght between 2 and 10";
                 return false;
              };
 

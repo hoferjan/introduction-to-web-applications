@@ -74,9 +74,9 @@
 
                 <label for="nickname">Nickname: </label>
                 
-                <input type="text" id="nickname" name="nickname" placeholder="Enter Nickname*" required pattern=".{5,}" value="<?= htmlspecialchars($nickname); ?>">
+                <input type="text" id="nickname" name="nickname" placeholder="Enter Nickname*" required pattern=".{5,20}" value="<?= htmlspecialchars($nickname); ?>">
                 <div class= "invalid" id="invalid_length_nickname">
-                    Nickname must be at least 5 characters long
+                    Nickname must be at least 5 characters long and not longer than 20 characters
                 </div>
                 <div class= "invalid" id="invalid_exists_nickname">
                     Nickname already exists

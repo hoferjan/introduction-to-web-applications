@@ -77,7 +77,7 @@ function timerclose_price(e){
 //validation functions
 function validatename(e){
     if (namee.value.length != 0) {
-        if (namee.value.length < 3) {
+        if (namee.value.length < 3 || namee.value.length > 15) {
             invalid_name.style.display = "block";
         } else {
             invalid_name.style.display = "none";
@@ -90,7 +90,7 @@ function validatename(e){
 
 function validateticker(e){ 
     if (ticker.value.length != 0) {
-        if (ticker.value.length < 2) {
+        if (ticker.value.length < 2 || ticker.value.length > 10) {
             invalid_ticker.style.display = "block";
         } else {
             invalid_ticker.style.display = "none";

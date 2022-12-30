@@ -26,6 +26,8 @@ function sortPositions(array $positions, string $sort) {
         return $b['profit'] <=> $a['profit'];
       });
       break;
+    case "not_sorted":
+      break;
   }
   return $positions;
 }

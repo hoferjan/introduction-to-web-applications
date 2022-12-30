@@ -48,6 +48,11 @@ a {
     padding-top: 10px;
 }
 
+.delete {
+    color: rgb(255, 87, 87);
+    padding: 0px;
+}
+
 /* links hover */
 a:hover {
     color: rgb(61, 184, 183);

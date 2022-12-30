@@ -103,7 +103,7 @@
 
     function validatenickname(e){ //later add nickname check if already taken
         if (nickname.value.length != 0){
-            if (nickname.value.length < 5)
+            if (nickname.value.length < 5 || nickname.value.length > 20)
             {
                 invalid_length_nickname.style.display = "block";
 

@@ -64,6 +64,10 @@
     $page = (int) $_POST['page'];
   }
   
+
+  // in case form not submitted, type set to all
+  $type = "all";  
+  
   // Check if the type form has been submitted
   if (isset($_POST['type'])) {
     // Get the type selected by the user
@@ -149,6 +153,7 @@
           <?php if (isset($sort)) { ?>
             <option value="<?= $sort ?>"><?= $sort ?></option>
           <?php } ?>
+            <option value="not_sorted">Not sorted</option>
             <option value="highest_profit">Highest profit</option>
             <option value="highest_price">Highest opening price</option>
             <option value="lowest_price">Lowest opening price</option>
@@ -156,6 +161,10 @@
             <option value="oldest">Oldest</option>
           </select>
           <?php if (isset($type)) { ?>
+            <input type="hidden" name="type" id="type" value="<?= $type ?>">
+          <?php } ?>
+          <?php if (!isset($type)) {
+            $type = "all"; ?>
             <input type="hidden" name="type" id="type" value="<?= $type ?>">
           <?php } ?>
         </form>
@@ -170,6 +179,7 @@
                     <th class="opening_price_head">Opening price</th>
                     <th class="closing_price_head">Closing price</th>
                     <th class="type_head">Type</th>
+                    <th class="delete_head">Delete</th>
                 </tr>
           <?php
           //displays the table with the positions
@@ -183,8 +193,9 @@
                   echo "<td class='currency'>" . $position['currency'] . "</td>";
                   echo "<td class='amount'>" . $position['amount'] . "</td>";
                   echo "<td class='opening_price'>" . $position['opening_price'] . "</td>";
-                  echo "<td>" . $position['closing_price'] . " (" . $position['profit'] . "%)</td>";
+                  echo "<td class='closing_price'>" . $position['closing_price'] . " (" . $position['profit'] . "%)</td>";
                   echo "<td class='type'>" . $position['type'] . "</td>";
+                  echo "<td class='delete'><a href='PHP/delete.php?id=" . $position['position_id'] . "'class='delete'>X</a></td>";
                   echo "</tr>";
           }
           ?>
@@ -202,6 +213,11 @@
               <?php if (isset($type)) { ?>
               <input type="hidden" name="type" id="type" value="<?= $type ?>">
               <?php } ?>
+              <?php if (!isset($type)) { 
+                $type = "all"?>
+              <input type="hidden" name="type" id="type" value="<?= "$type" ?>">
+              <?php } ?>
+
               <?php if (isset($sort)) { ?>
               <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
               <?php } ?>
@@ -213,25 +229,16 @@
                     <legend></legend>
 
                     <label for="name">Name: </label>
-                    <input type="text" id="name" name="name" placeholder="Enter Name" required pattern=".{3,}" value="<?= htmlspecialchars($name); ?>">
-                    <?php
-                    if (isset($nameIsValid) && $nameIsValid == false)  {
-                      echo '<br><span class="invalid-php">Invalid Entry</span><br>';
-                      }
-                    ?>
+                    <input type="text" id="name" name="name" placeholder="Enter Name" required pattern=".{3,15}" value="<?= htmlspecialchars($name); ?>">
                     <div class= "invalid" id="invalid_name">
-                      Please enter a valid name
+                      Please enter a valid name, lenght between 3 and 15 characters
                     </div>
 
                     <label for="ticker">Ticker: </label>
-                    <input type="text" id="ticker" name="ticker" placeholder="Enter Ticker" required pattern=".{2,}" value="<?= htmlspecialchars($ticker); ?>">
-                    <?php
-                    if (isset($tickerIsValid) && $tickerIsValid == false)  {
-                      echo '<br><span class="invalid-php">Invalid Entry</span><br>';
-                      }
-                    ?>
+                    <input type="text" id="ticker" name="ticker" placeholder="Enter Ticker" required pattern=".{2,10}" value="<?= htmlspecialchars($ticker); ?>">
+
                     <div class= "invalid" id="invalid_ticker">
-                      Please enter a valid ticker
+                      Please enter a valid ticker, lenght between 2 and 10 characters
                     </div>
 
                     <label for="long_short_select">Long/Short: </label>

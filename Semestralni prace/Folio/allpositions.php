@@ -43,6 +43,7 @@
     $page = (int) $_POST['page'];
     }
 
+
   // Check if the type form has been submitted
   if (isset($_POST['type'])) {
     // Get the type selected by the user
@@ -52,7 +53,7 @@
     $refilteredPositions = [];
     $refilteredPositions = filterPositionsByType($type, $filteredPositions);
   }
-
+  
   // if user did not filter positions, set the filtered positions to the prefiltered positions
   if (!isset($refilteredPositions)) {
     $refilteredPositions = $filteredPositions;
@@ -124,6 +125,7 @@
           <?php if (isset($sort)) { ?>
             <option value="<?= $sort ?>"><?= $sort ?></option>
           <?php } ?>
+            <option value="not_sorted">Not sorted</option>
             <option value="highest_profit">Highest profit</option>
             <option value="highest_price">Highest opening price</option>
             <option value="lowest_price">Lowest opening price</option>

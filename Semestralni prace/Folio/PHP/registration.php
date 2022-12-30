@@ -59,10 +59,10 @@
 
         //nickname validation
         function validateNickname() {
-            if (strlen($this->username) >= 5){
+            if (strlen($this->username) >= 5 && strlen($this->username) <= 20){
                 return true;
             }else{
-                $this->error = "Nickname must be at least 5 characters long";
+                $this->error = "Nickname must be at least 5 characters long and not longer than 20 characters";
                 return false;
             }
         }
