@@ -6,9 +6,8 @@ function filterPositionsByType($type, $filteredPositions) {
         return $filteredPositions;
     }
     foreach ($filteredPositions as $position) {
-        if ($position['type'] == $type) {
+        if ($position['type_select'] == $type) {
             array_push($refilteredPositions, $position);
-
         }
     }
     return $refilteredPositions;

@@ -33,7 +33,7 @@
     $openPrice = '';
     $closePrice = '';
     $privatePublic = '';
-    $type = '';
+    $type_select = '';
 
     if ($formIsSent){
         $name = $_POST["name"];
@@ -45,12 +45,12 @@
         $openPrice = $_POST["open_price"];
         $closePrice = $_POST["close_price"];
         $privatePublic = $_POST["private_public"];
-        $type = $_POST["type"];
+        $type_select = $_POST["type_select"];
 
-        $newPosition = new AddPosition($name, $ticker, $longShort, $privatePublic, $date, $currency, $amount, $openPrice, $closePrice, $type);
+        $newPosition = new AddPosition($name, $ticker, $longShort, $privatePublic, $date, $currency, $amount, $openPrice, $closePrice, $type_select);
        }
   
-        // Load the positions from the JSON file
+  // Load the positions from the JSON file
   $positions = json_decode(file_get_contents('JSON/positions.json'), true);
 
 
@@ -101,7 +101,10 @@
     }
 
   // Retrieve the additional positions from the array
-  $additionalPositions = array_slice($refilteredPositions, 0,$page * 20);
+  $additionalPositions = array_slice($refilteredPositions, ($page -1)* 20,$page * 20);
+
+  //calculate the total number of positions
+  $totalPositions = count($refilteredPositions);
 ?>
 <!DOCTYPE html> 
 <html lang="en">
@@ -204,7 +207,7 @@
                   echo "<td class='amount'>" . $position['amount'] . "</td>";
                   echo "<td class='opening_price'>" . $position['opening_price'] . "</td>";
                   echo "<td class='closing_price'>" . $position['closing_price'] . " (" . $position['profit'] . "%)</td>";
-                  echo "<td class='type'>" . $position['type'] . "</td>";
+                  echo "<td class='type'>" . $position['type_select'] . "</td>";
                   echo "<td class='delete'><a href='PHP/delete.php?id=" . $position['position_id'] . "'class='delete'>X</a></td>";
                   echo "</tr>";
           }
@@ -213,26 +216,38 @@
             </tbody></table>
             </div>
       <div id="pagination">
-          <form action="mypositions.php" method="POST">
-              <!-- Display the "load more" button only if there are additional positions to load -->
-              <?php if ($page * 20 < count($refilteredPositions)) { ?>
-              <button type="submit" id="load-more-btn">Load more</button>
-              <?php } ?>
-              <!-- Add a hidden input field to store the current page number -->
-              <input type="hidden" name="page" id="page" value="<?= $page + 1 ?>">
-              <?php if (isset($type)) { ?>
-              <input type="hidden" name="type" id="type" value="<?= $type ?>">
-              <?php } ?>
-              <?php if (!isset($type)) { 
-                $type = "all"?>
-              <input type="hidden" name="type" id="type" value="<?= "$type" ?>">
-              <?php } ?>
-
-              <?php if (isset($sort)) { ?>
-              <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
-              <?php } ?>
-              <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-          </form>
+        <form action="" method="POST">
+          <!-- Display the "load more" button only if there are additional positions to load -->
+          <?php if ($page * 20 < count($refilteredPositions)) { ?>
+          <button type="submit" id="load-more-btn">Load Next</button>
+          <?php } ?>
+          <!-- Add a hidden input field to store the current page number -->
+          <input type="hidden" name="page" id="page" value="<?= $page + 1 ?>">
+          <?php if (isset($type)) { ?>
+          <input type="hidden" name="type" id="type" value="<?= $type ?>">
+          <?php } ?>
+          <?php if (isset($sort)) { ?>
+          <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
+          <?php } ?>
+          <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+        </form>
+        <form method="post" action="">
+          <?php if ($page != 1) { ?>
+          <button type="submit" name="load-prev-btn" value="1">Load Previous</button>
+          <?php } ?>
+          <!-- Add a hidden input field to store the current page number -->
+          <input type="hidden" name="page" id="page" value="<?= $page - 1 ?>">
+          <?php if (isset($type)) { ?>
+          <input type="hidden" name="type" id="type" value="<?= $type ?>">
+          <?php } ?>
+          <?php if (isset($sort)) { ?>
+          <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
+          <?php } ?>
+          <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+        </form>  
+      </div>
+      <div id="progress">
+        <p>Displaying positions <?= ($page - 1) * 20 + 1 ?>-<?= $page * 20 ?> out of <?= $totalPositions ?></p>
       </div>
             <form action="" method="POST">
                 <h2>Add position</h2>
@@ -311,9 +326,9 @@
                     </select>
                     
                   <label for="type_select">Type: </label>
-                  <select name="type" id="type_select">
-                    <?php if (isset($type) && $type != '') { ?>
-                        <option value="<?= $type ?>"><?= $type ?></option>
+                  <select name="type_select" id="type_select">
+                    <?php if (isset($type_select) && $type_select != '') { ?>
+                        <option value="<?= $type_select ?>"><?= $type_select ?></option>
                     <?php } ?>
                     <option value="not_selected"></option>
                     <option value="stocks">Stocks</option>

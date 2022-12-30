@@ -33,7 +33,7 @@
 
   //get only the positions which are not set to private or the user is the owner
   foreach ($positions as $position) {
-    if ($position['private_public'] != "private" || $position['uid'] == $_SESSION['uid']) {
+    if ($position['private_public'] != "private" && $position['uid'] != $_SESSION['uid']) {
           //push position to filteredPositions
           array_push($filteredPositions, $position);
       }
@@ -72,8 +72,11 @@
     // Sort the positions by the selected sort
     $refilteredPositions = sortPositions($refilteredPositions, $sort);
   }
-    // Retrieve the additional positions from the array
-    $additionalPositions = array_slice($refilteredPositions, 0,$page * 20);
+  // Retrieve the additional positions from the array
+  $additionalPositions = array_slice($refilteredPositions, ($page - 1) * 20, ($page * 20) - 1);
+
+  //calculate the total number of positions
+  $totalPositions = count($refilteredPositions);
 ?>
 
 <!DOCTYPE html>
@@ -173,7 +176,7 @@
                           echo "<td class='amount'>" . $position['amount'] . "</td>";
                           echo "<td class='opening_price'>" . $position['opening_price'] . "</td>";
                           echo "<td>" . $position['closing_price'] . " (" . $position['profit'] . "%)</td>";
-                          echo "<td class='type'>" . $position['type'] . "</td>";
+                          echo "<td class='type'>" . $position['type_select'] . "</td>";
                           echo "</tr>";
                       }
                     ?>
@@ -181,10 +184,10 @@
               </table>
           </div>
           <div id="pagination">
-          <form action="" method="POST">
+            <form action="" method="POST">
               <!-- Display the "load more" button only if there are additional positions to load -->
               <?php if ($page * 20 < count($refilteredPositions)) { ?>
-              <button type="submit" id="load-more-btn">Load more</button>
+              <button type="submit" id="load-more-btn">Load Next</button>
               <?php } ?>
               <!-- Add a hidden input field to store the current page number -->
               <input type="hidden" name="page" id="page" value="<?= $page + 1 ?>">
@@ -195,8 +198,25 @@
               <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
               <?php } ?>
               <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-          </form>
-      </div>
+            </form>
+            <form method="post" action="">
+              <?php if ($page != 1) { ?>
+              <button type="submit" name="load-prev-btn" value="1">Load Previous</button>
+              <?php } ?>
+              <!-- Add a hidden input field to store the current page number -->
+              <input type="hidden" name="page" id="page" value="<?= $page - 1 ?>">
+              <?php if (isset($type)) { ?>
+              <input type="hidden" name="type" id="type" value="<?= $type ?>">
+              <?php } ?>
+              <?php if (isset($sort)) { ?>
+              <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
+              <?php } ?>
+              <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            </form>  
+          </div>
+          <div id="progress">
+            <p>Displaying positions <?= ($page - 1) * 20 + 1 ?>-<?= $page * 20 ?> out of <?= $totalPositions ?></p>
+          </div>
         </div>
         <footer class="footer">
           <div class="copyright">Copyright &copy; 2022</div>

@@ -9,7 +9,7 @@
         private $amount;
         private $opening_price;
         private $closing_price;
-        private $type;
+        private $type_select;
         private $storage = "JSON/positions.json";
         private $stored_positions; //array of positions already made
         private $new_position;
@@ -18,7 +18,7 @@
         public $uid;
 
         //transforming all the inputs to prevent XSS attacks
-        public function __construct($name, $ticker, $longShort, $private_public, $date, $currency, $amount, $opening_price, $closing_price, $type){
+        public function __construct($name, $ticker, $longShort, $private_public, $date, $currency, $amount, $opening_price, $closing_price, $type_select){
             $this->name = htmlspecialchars(trim($name));
             $this->ticker = htmlspecialchars(trim($ticker));
             $this->longShort = $longShort;
@@ -28,11 +28,7 @@
             $this->amount = trim($amount);
             $this->opening_price = trim($opening_price);
             $this->closing_price = trim($closing_price);
-            if ($this->closing_price == "" || $this->closing_price == null){
-                $this->profit = -100; 
-            }else{
-                $this->profit =(int)(($this->closing_price - $this->opening_price) / $this->opening_price * 100);}
-            $this->type = $type;
+            $this->type_select = $type_select;
             $this->private_public = $private_public;
             $this->stored_positions = json_decode(file_get_contents($this->storage), true);
             $this->new_position = [
@@ -46,8 +42,8 @@
                 "amount" => $this->amount,
                 "opening_price" => $this->opening_price,
                 "closing_price" => $this->closing_price,
-                "profit" => $this->profit,
-                "type" => $this->type,
+                "profit" => ($this->closing_price - $this->opening_price) / $this->opening_price * 100,
+                "type_select" => $this->type_select,
                 "uid" => $_SESSION["uid"]
             ];
             if ($this->checkPosition()){
@@ -59,7 +55,7 @@
             if ((strlen($this -> name) >= 3) && (strlen($this ->name) <= 15)){
                 return true;
             } else {
-                $this->error = "Please enter a valid name, lenght between 3 and 15";
+                $this->error = "Please enter a valid name";
                 return false;
             };
         }
@@ -68,7 +64,7 @@
              if((strlen($this->ticker) >= 2) && (strlen($this->ticker) <= 10)){
                 return true;
             } else {
-                $this->error = "Please enter a valid ticker, lenght between 2 and 10";
+                $this->error = "Please enter a valid ticker";
                 return false;
              };
 
@@ -137,7 +133,7 @@
         }
         
         function validateType() {
-            return $this->type != '0' && $this->type != '---------' && $this->type != '' && $this->type != 'not_selected';
+            return $this->type_select != '0' && $this->type_select != '---------' && $this->type_select != '' && $this->type_select != 'not_selected';
         }
         //checks if all values were entered correctly
         public function checkPosition(){
@@ -148,8 +144,7 @@
         }
         //adds new position to json file
         public function addPosition(){
-            //add the new position to the front so the newer the position is the higher it is in the list
-            array_unshift($this->stored_positions, $this->new_position);
+            array_push($this->stored_positions, $this->new_position);
             if(file_put_contents($this->storage, json_encode($this->stored_positions))){
                 $this->success = "Position added successfully";
                 return true;

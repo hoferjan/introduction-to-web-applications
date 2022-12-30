@@ -330,3 +330,37 @@ button:hover {
         display: none;
     }
 }
+
+/* Pagination */
+#pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(0, 56, 124);
+    float: center;
+    text-align: center;
+    width: 100%;
+}
+
+#load-prev-btn {
+    width :45%;
+    padding: 5px;
+}
+
+#load-next-btn {
+    width :45%;
+    padding: 5px;
+}
+
+#progress {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
