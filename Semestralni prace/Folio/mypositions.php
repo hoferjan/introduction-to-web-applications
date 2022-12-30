@@ -26,7 +26,6 @@
     $closePrice = '';
     $privatePublic = '';
     $type = '';
-    global $error;
 
     if ($formIsSent){
         $name = $_POST["name"];
@@ -66,7 +65,7 @@
   }
   
   // Check if the type form has been submitted
-  if (isset($_POST['type']) && $_POST['type'] != "all") {
+  if (isset($_POST['type'])) {
     // Get the type selected by the user
     $type = $_POST['type'];
 
@@ -123,6 +122,7 @@
           </div>
         </header>
         <div id="content"> 
+          <!-- filtering form -->
         <form method="post" action="">
           <label for="type">Filter by type:</label>
           <select name="type" id="type" onchange="this.form.submit()">
@@ -142,12 +142,14 @@
             <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
           <?php } ?>
         </form>
+        <!-- sorting form -->
         <form method="post" action="">
           <label for="sort">Sort by:</label>
           <select name="sort" id="sort" onchange="this.form.submit()">
           <?php if (isset($sort)) { ?>
             <option value="<?= $sort ?>"><?= $sort ?></option>
           <?php } ?>
+            <option value="highest_profit">Highest profit</option>
             <option value="highest_price">Highest opening price</option>
             <option value="lowest_price">Lowest opening price</option>
             <option value="newest">Newest</option>
@@ -170,6 +172,7 @@
                     <th class="type_head">Type</th>
                 </tr>
           <?php
+          //displays the table with the positions
           foreach ($additionalPositions as $position) {
               // check if the position's user ID matches the session user ID
                   echo "<tr class='tcontent'>";
@@ -180,7 +183,7 @@
                   echo "<td class='currency'>" . $position['currency'] . "</td>";
                   echo "<td class='amount'>" . $position['amount'] . "</td>";
                   echo "<td class='opening_price'>" . $position['opening_price'] . "</td>";
-                  echo "<td class='closing_price'>" . $position['closing_price'] . "</td>";
+                  echo "<td>" . $position['closing_price'] . " (" . $position['profit'] . "%)</td>";
                   echo "<td class='type'>" . $position['type'] . "</td>";
                   echo "</tr>";
           }
@@ -273,7 +276,7 @@
                     </div>
 
                     <label for="close_price">Closing price: </label>
-                    <input type="number" id="close_price" name="close_price" placeholder="Enter close price" pattern="[0-9]+"value="<?= htmlspecialchars($closPrice); ?>">
+                    <input type="number" id="close_price" name="close_price" placeholder="Enter close price" pattern="[0-9]+"value="<?= htmlspecialchars($closePrice); ?>">
                     <div class= "invalid" id="invalid_close_price">
                       Please enter a valid price
                     </div>

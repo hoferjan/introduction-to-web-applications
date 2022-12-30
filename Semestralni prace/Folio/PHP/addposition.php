@@ -28,6 +28,10 @@
             $this->amount = trim($amount);
             $this->opening_price = trim($opening_price);
             $this->closing_price = trim($closing_price);
+            if ($this->closing_price == "" || $this->closing_price == null){
+                $this->profit = -100; 
+            }else{
+                $this->profit =(int)(($this->closing_price - $this->opening_price) / $this->opening_price * 100);}
             $this->type = $type;
             $this->private_public = $private_public;
             $this->stored_positions = json_decode(file_get_contents($this->storage), true);
@@ -42,6 +46,7 @@
                 "amount" => $this->amount,
                 "opening_price" => $this->opening_price,
                 "closing_price" => $this->closing_price,
+                "profit" => $this->profit,
                 "type" => $this->type,
                 "uid" => $_SESSION["uid"]
             ];

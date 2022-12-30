@@ -44,7 +44,7 @@
     }
 
   // Check if the type form has been submitted
-  if (isset($_POST['type']) && $_POST['type'] != "all") {
+  if (isset($_POST['type'])) {
     // Get the type selected by the user
     $type = $_POST['type'];
 
@@ -124,6 +124,7 @@
           <?php if (isset($sort)) { ?>
             <option value="<?= $sort ?>"><?= $sort ?></option>
           <?php } ?>
+            <option value="highest_profit">Highest profit</option>
             <option value="highest_price">Highest opening price</option>
             <option value="lowest_price">Lowest opening price</option>
             <option value="newest">Newest</option>
@@ -162,7 +163,7 @@
                           echo "<td class='currency'>" . $position['currency'] . "</td>";
                           echo "<td class='amount'>" . $position['amount'] . "</td>";
                           echo "<td class='opening_price'>" . $position['opening_price'] . "</td>";
-                          echo "<td class='closing_price'>" . $position['closing_price'] . "</td>";
+                          echo "<td>" . $position['closing_price'] . " (" . $position['profit'] . "%)</td>";
                           echo "<td class='type'>" . $position['type'] . "</td>";
                           echo "</tr>";
                       }

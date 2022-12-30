@@ -24,6 +24,7 @@
         $user =new RegisterUser($nickname, $password, $repeat_password, $email, $favorite_type);
             
         }
+          
 ?>
 
 <!DOCTYPE html>
@@ -77,14 +78,14 @@
                 <div class= "invalid" id="invalid_length_nickname">
                     Nickname must be at least 5 characters long
                 </div>
+                <div class= "invalid" id="invalid_exists_nickname">
+                    Nickname already exists
+                </div>
                 <?php
                 if (isset($nicknameIsValid) && $nicknameIsValid == false) {
                     echo '<br><span class="invalid-php">Invalid Entry</span><br>';
                     }
                 ?>
-                <!-- <div class= "invalid" id="invalid_taken_nickname">
-                    Nickname is already taken
-                </div> -->
                 
 
                 <label for="password">Password: </label>

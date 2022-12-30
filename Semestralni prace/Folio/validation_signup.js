@@ -53,7 +53,8 @@
             clearTimeout(timer);
             timer = null;
         }
-        timer = setTimeout(function() {validatenickname(e)}, 300);
+        timer = setTimeout(function() {validatenickname(e); ValidateAjaxNickname(e)}, 300);
+
     }
 
     // function timerfavorite_type_select(e){ //favorite select not required
@@ -133,7 +134,6 @@
     }
 
     function checkrequired() {
-    console.log("checkrequired")
     if (email.value.length != 0 && nickname.value.length != 0 && password.value.length != 0 && repeat_password.value.length != 0)
     {
         invalid_required.style.display = "none";
@@ -151,4 +151,22 @@
         }
 
     }
+
+    function ValidateAjaxNickname(e) {
+        var nicknameV = nickname.value;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText == "exists") {
+              document.getElementById("invalid_exists_nickname").style.display = "block";
+            } else {
+              document.getElementById("invalid_exists_nickname").style.display = "none";
+            }
+          }
+        };
+        xhr.open("POST", "PHP/checknickname.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send("nickname=" + nicknameV);
+      }
+      
 
