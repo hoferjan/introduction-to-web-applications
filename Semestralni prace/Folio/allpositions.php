@@ -73,7 +73,7 @@
     $refilteredPositions = sortPositions($refilteredPositions, $sort);
   }
   // Retrieve the additional positions from the array
-  $additionalPositions = array_slice($refilteredPositions, ($page - 1) * 20, ($page * 20) - 1);
+  $additionalPositions = array_slice($refilteredPositions, ($page - 1) * 20, 20);
 
   //calculate the total number of positions
   $totalPositions = count($refilteredPositions);
@@ -184,6 +184,20 @@
               </table>
           </div>
           <div id="pagination">
+            <form method="post" action="">
+              <?php if ($page != 1) { ?>
+              <button type="submit" name="load-prev-btn" value="1">Load Previous</button>
+              <?php } ?>
+              <!-- Add a hidden input field to store the current page number -->
+              <input type="hidden" name="page" id="page" value="<?= $page - 1 ?>">
+              <?php if (isset($type)) { ?>
+              <input type="hidden" name="type" id="type" value="<?= $type ?>">
+              <?php } ?>
+              <?php if (isset($sort)) { ?>
+              <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
+              <?php } ?>
+              <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            </form>  
             <form action="" method="POST">
               <!-- Display the "load more" button only if there are additional positions to load -->
               <?php if ($page * 20 < count($refilteredPositions)) { ?>
@@ -199,20 +213,6 @@
               <?php } ?>
               <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             </form>
-            <form method="post" action="">
-              <?php if ($page != 1) { ?>
-              <button type="submit" name="load-prev-btn" value="1">Load Previous</button>
-              <?php } ?>
-              <!-- Add a hidden input field to store the current page number -->
-              <input type="hidden" name="page" id="page" value="<?= $page - 1 ?>">
-              <?php if (isset($type)) { ?>
-              <input type="hidden" name="type" id="type" value="<?= $type ?>">
-              <?php } ?>
-              <?php if (isset($sort)) { ?>
-              <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
-              <?php } ?>
-              <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-            </form>  
           </div>
           <div id="progress">
             <p>Displaying positions <?= ($page - 1) * 20 + 1 ?>-<?= $page * 20 ?> out of <?= $totalPositions ?></p>

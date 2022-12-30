@@ -68,7 +68,7 @@
 
   // Check if the page form has been submitted
   if (isset($_POST['page'])) {
-    // Set the page number and offset from the form submission
+    // Set the page number from the form submission
     $page = (int) $_POST['page'];
   }
   
@@ -101,7 +101,7 @@
     }
 
   // Retrieve the additional positions from the array
-  $additionalPositions = array_slice($refilteredPositions, ($page -1)* 20,$page * 20);
+  $additionalPositions = array_slice($refilteredPositions, (($page -1)* 20), 20);
 
   //calculate the total number of positions
   $totalPositions = count($refilteredPositions);
@@ -216,13 +216,12 @@
             </tbody></table>
             </div>
       <div id="pagination">
-        <form action="" method="POST">
-          <!-- Display the "load more" button only if there are additional positions to load -->
-          <?php if ($page * 20 < count($refilteredPositions)) { ?>
-          <button type="submit" id="load-more-btn">Load Next</button>
+        <form method="post" action="">
+          <?php if ($page != 1) { ?>
+          <button type="submit" name="load-prev-btn" value="1">Load Previous</button>
           <?php } ?>
           <!-- Add a hidden input field to store the current page number -->
-          <input type="hidden" name="page" id="page" value="<?= $page + 1 ?>">
+          <input type="hidden" name="page" id="page" value="<?= $page - 1 ?>">
           <?php if (isset($type)) { ?>
           <input type="hidden" name="type" id="type" value="<?= $type ?>">
           <?php } ?>
@@ -231,12 +230,13 @@
           <?php } ?>
           <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
         </form>
-        <form method="post" action="">
-          <?php if ($page != 1) { ?>
-          <button type="submit" name="load-prev-btn" value="1">Load Previous</button>
+        <form action="" method="POST">
+          <!-- Display the "load more" button only if there are additional positions to load -->
+          <?php if ($page * 20 < count($refilteredPositions)) { ?>
+          <button type="submit" id="load-more-btn">Load Next</button>
           <?php } ?>
           <!-- Add a hidden input field to store the current page number -->
-          <input type="hidden" name="page" id="page" value="<?= $page - 1 ?>">
+          <input type="hidden" name="page" id="page" value="<?= $page + 1 ?>">
           <?php if (isset($type)) { ?>
           <input type="hidden" name="type" id="type" value="<?= $type ?>">
           <?php } ?>
