@@ -148,7 +148,8 @@
         }
         //adds new position to json file
         public function addPosition(){
-            array_push($this->stored_positions, $this->new_position);
+            //add the new position to the front so the newer the position is the higher it is in the list
+            array_unshift($this->stored_positions, $this->new_position);
             if(file_put_contents($this->storage, json_encode($this->stored_positions))){
                 $this->success = "Position added successfully";
                 return true;

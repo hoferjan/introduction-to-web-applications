@@ -112,7 +112,7 @@
         //inserts new user into json file
         public function insertUser(){
             if (($this ->usernameExists($this -> username) == FALSE) && ($this ->emailExists($this -> email) == FALSE)){
-            array_push($this->stored_users, $this->new_user);
+            array_unshift($this->stored_users, $this->new_user);
                 if(file_put_contents($this->storage, json_encode($this->stored_users))){
                     $this->success = "Your registration was successful";
                     $_SESSION['uid'] = $this -> new_user['uid'];

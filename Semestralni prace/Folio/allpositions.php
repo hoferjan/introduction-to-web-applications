@@ -1,8 +1,5 @@
 <?php 
   session_start();
-  if (!isset($_SESSION['css'])) {
-      $_SESSION['css'] = 'CSS/style.css';
-  }
 
   require "PHP/logination.php";
   require "PHP/themeswitcher.php";
@@ -20,6 +17,14 @@
       $user = getUserByUid($uid);
   } else {
       header('Location: homepage.php');
+  }
+
+  //CSRF token protection
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Validate the CSRF token
+    if ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
+        die('Invalid CSRF token');
+    }
   }
 
   // Load the positions from the JSON file
@@ -118,6 +123,7 @@
           <?php if (isset($sort)) { ?>
             <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
           <?php } ?>
+          <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
         </form>
         <form method="post" action="">
           <label for="sort">Sort by:</label>
@@ -135,6 +141,7 @@
           <?php if (isset($type)) { ?>
             <input type="hidden" name="type" id="type" value="<?= $type ?>">
           <?php } ?>
+          <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
         </form>
             <div id="table">
                 <table>
@@ -187,6 +194,7 @@
               <?php if (isset($sort)) { ?>
               <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
               <?php } ?>
+              <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
           </form>
       </div>
         </div>
@@ -194,6 +202,7 @@
           <div class="copyright">Copyright &copy; 2022</div>
           <form action="" method="POST">
             <div><button type=submit id="namebutton" name="namebutton">J. Hofer</button></div>
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
           </form>
         </footer>
       </body>

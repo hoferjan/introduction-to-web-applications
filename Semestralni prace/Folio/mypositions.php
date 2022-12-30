@@ -15,6 +15,14 @@
         header('Location: homepage.php');
     }
 
+    //CSRF token protection
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      // Validate the CSRF token
+      if ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
+          die('Invalid CSRF token');
+      }
+    }
+
     $formIsSent = isset($_POST["add"]);
     $name = '';
     $ticker = '';
@@ -145,6 +153,7 @@
           <?php if (isset($sort)) { ?>
             <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
           <?php } ?>
+          <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
         </form>
         <!-- sorting form -->
         <form method="post" action="">
@@ -167,6 +176,7 @@
             $type = "all"; ?>
             <input type="hidden" name="type" id="type" value="<?= $type ?>">
           <?php } ?>
+          <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
         </form>
             <table>
                 <tbody><tr class="thead">
@@ -221,6 +231,7 @@
               <?php if (isset($sort)) { ?>
               <input type="hidden" name="sort" id="sort" value="<?= $sort ?>">
               <?php } ?>
+              <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
           </form>
       </div>
             <form action="" method="POST">
@@ -328,12 +339,13 @@
                       }
                   ?>
                 </fieldset>
-                
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             </form>
         <footer class="footer">
           <div class="copyright">Copyright &copy; 2022</div>
           <form action="" method="POST">
             <div><button type=submit id="namebutton" name="namebutton">J. Hofer</button></div>
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
           </form>
         </footer>
       </body>

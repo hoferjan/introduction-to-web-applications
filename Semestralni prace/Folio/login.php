@@ -3,9 +3,21 @@
     if (!isset($_SESSION['css'])) {
         $_SESSION['css'] = 'CSS/style.css';
     }
+
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+      }
     
     require "PHP/logination.php";
     require "PHP/themeswitcher.php";
+
+    //CSRF token protection
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // Validate the CSRF token
+        if ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
+            die('Invalid CSRF token');
+        }
+    }
 
     $formIsSent = isset($_POST["log"]);
     $email = '';
@@ -95,12 +107,14 @@
                             }
                         ?>
                     </fieldset>
+                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 </form>
         </div>
         <footer class="footer">
             <div class="copyright">Copyright &copy; 2022</div>
             <form action="" method="POST">
             <div><button type=submit id="namebutton" name="namebutton">J. Hofer</button></div>
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             </form>
         </footer>
     </body>
