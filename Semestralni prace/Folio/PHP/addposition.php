@@ -117,7 +117,7 @@ class AddPosition{
         }
     }
 
-    //if closing price exist check it, user can leave ti blank
+    //if closing price exist check it, user can leave it blank
     function validateClosingPrice() {
         if ($this->closing_price != null ){
             if ($this->closing_price > 0 && strlen($this->closing_price) > 0){
