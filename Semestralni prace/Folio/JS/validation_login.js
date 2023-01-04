@@ -1,5 +1,3 @@
-
-
 //queryselector variables and invalid element messages
 const formElement = document.querySelector("form");
 formElement.addEventListener("submit", validateall);

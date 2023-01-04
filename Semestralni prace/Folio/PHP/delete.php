@@ -13,6 +13,7 @@ if (isset($_GET['id'])) {
     
     // Find the position with the matching id
     foreach ($positions as $index => $position) {
+        //checks if the position belongs to the user and if the id matches
         if ($position['position_id'] == $id && $position['uid'] == $_SESSION['uid']) {
             // Remove the position from the array
             unset($positions[$index]);

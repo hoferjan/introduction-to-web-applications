@@ -1,4 +1,5 @@
 /* general */
+/* puts everything in bw and grayscale, doesnt hide any elements as user might like to discuss the design after printing */
 * {
     padding: 0;
     margin: 1px;

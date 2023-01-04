@@ -1,3 +1,4 @@
+//!not used in the project!
 function init()
 {
     const formElement = document.querySelector("form"); // saves first <form> element to variable

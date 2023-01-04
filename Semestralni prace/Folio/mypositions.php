@@ -1,110 +1,110 @@
 <?php 
-    session_start();
-    require "PHP/logination.php";
-    require "PHP/themeswitcher.php";
-    require "PHP/addposition.php";
-    require "PHP/filterpositions.php";
-    require "PHP/sortpositions.php";
+session_start();
+require "PHP/logination.php";
+require "PHP/themeswitcher.php";
+require "PHP/addposition.php";
+require "PHP/filterpositions.php";
+require "PHP/sortpositions.php";
 
-    $uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
+$uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
 
-    //sends to homepage if not logged in
-    if ($uid) {
-        $user = getUserByUid($uid);
-    } else {
-        header('Location: homepage.php');
+//sends to homepage if not logged in
+if ($uid) {
+    $user = getUserByUid($uid);
+} else {
+    header('Location: homepage.php');
+}
+
+//CSRF token protection
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  // Validate the CSRF token
+  if ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
+      die('Invalid CSRF token');
+  }
+}
+
+$formIsSent = isset($_POST["add"]);
+$name = '';
+$ticker = '';
+$longShort = '';
+$date = '';
+$currency = '';
+$amount = '';
+$openPrice = '';
+$closePrice = '';
+$privatePublic = '';
+$type_select = '';
+
+if ($formIsSent){
+  $name = $_POST["name"];
+  $ticker = $_POST["ticker"];
+  $longShort = $_POST["long_short"];
+  $date = $_POST["date"];
+  $currency = $_POST["currency"];
+  $amount = $_POST["amount"];
+  $openPrice = $_POST["open_price"];
+  $closePrice = $_POST["close_price"];
+  $privatePublic = $_POST["private_public"];
+  $type_select = $_POST["type_select"];
+
+  $newPosition = new AddPosition($name, $ticker, $longShort, $privatePublic, $date, $currency, $amount, $openPrice, $closePrice, $type_select);
+}
+
+// Load the positions from the JSON file
+$positions = json_decode(file_get_contents('JSON/positions.json'), true);
+
+
+//get only the positions which are not set to private or the user is the owner
+$filteredPositions = [];
+foreach ($positions as $position) {
+  if ($position['uid'] == $_SESSION['uid']) {
+      //push position to filteredPositions
+      array_push($filteredPositions, $position);
     }
+}
 
-    //CSRF token protection
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-      // Validate the CSRF token
-      if ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
-          die('Invalid CSRF token');
-      }
-    }
+// Set the default page number
+$page = 1;
 
-    $formIsSent = isset($_POST["add"]);
-    $name = '';
-    $ticker = '';
-    $longShort = '';
-    $date = '';
-    $currency = '';
-    $amount = '';
-    $openPrice = '';
-    $closePrice = '';
-    $privatePublic = '';
-    $type_select = '';
-
-    if ($formIsSent){
-        $name = $_POST["name"];
-        $ticker = $_POST["ticker"];
-        $longShort = $_POST["long_short"];
-        $date = $_POST["date"];
-        $currency = $_POST["currency"];
-        $amount = $_POST["amount"];
-        $openPrice = $_POST["open_price"];
-        $closePrice = $_POST["close_price"];
-        $privatePublic = $_POST["private_public"];
-        $type_select = $_POST["type_select"];
-
-        $newPosition = new AddPosition($name, $ticker, $longShort, $privatePublic, $date, $currency, $amount, $openPrice, $closePrice, $type_select);
-       }
-  
-  // Load the positions from the JSON file
-  $positions = json_decode(file_get_contents('JSON/positions.json'), true);
+// Check if the page form has been submitted
+if (isset($_POST['page'])) {
+  // Set the page number from the form submission
+  $page = (int) $_POST['page'];
+}
 
 
-  //get only the positions which are not set to private or the user is the owner
-  $filteredPositions = [];
-  foreach ($positions as $position) {
-    if ($position['uid'] == $_SESSION['uid']) {
-          //push position to filteredPositions
-          array_push($filteredPositions, $position);
-      }
-  }
+// in case form not submitted, type set to all
+$type = "all";  
 
-  // Set the default page number
-  $page = 1;
+// Check if the type form has been submitted
+if (isset($_POST['type'])) {
+  // Get the type selected by the user
+  $type = $_POST['type'];
 
-  // Check if the page form has been submitted
-  if (isset($_POST['page'])) {
-    // Set the page number from the form submission
-    $page = (int) $_POST['page'];
-  }
-  
+  // Filter the positions by type
+  $refilteredPositions = [];
+  $refilteredPositions = filterPositionsByType($type, $filteredPositions);
+}
 
-  // in case form not submitted, type set to all
-  $type = "all";  
-  
-  // Check if the type form has been submitted
-  if (isset($_POST['type'])) {
-    // Get the type selected by the user
-    $type = $_POST['type'];
+// if user did not filter positions, set the filtered positions to the prefiltered positions
+if (!isset($refilteredPositions)) {
+  $refilteredPositions = $filteredPositions;
+}
 
-    // Filter the positions by type
-    $refilteredPositions = [];
-    $refilteredPositions = filterPositionsByType($type, $filteredPositions);
-  }
+// Check if the sort form has been submitted
+if (isset($_POST['sort'])) {
+  // Get the sort selected by the user
+  $sort = $_POST['sort'];
 
-  // if user did not filter positions, set the filtered positions to the prefiltered positions
-  if (!isset($refilteredPositions)) {
-    $refilteredPositions = $filteredPositions;
-  }
+  // Sort the positions by the selected sort
+  $refilteredPositions = sortPositions($refilteredPositions, $sort);
+}
 
-    // Check if the sort form has been submitted
-    if (isset($_POST['sort'])) {
-      // Get the sort selected by the user
-      $sort = $_POST['sort'];
-  
-      // Sort the positions by the selected sort
-      $refilteredPositions = sortPositions($refilteredPositions, $sort);
-    }
+// Retrieve the additional positions from the array
+$additionalPositions = array_slice($refilteredPositions, (($page -1)* 20), 20);
 
-  // Retrieve the additional positions from the array
-  $additionalPositions = array_slice($refilteredPositions, (($page -1)* 20), 20);
-
-  //calculate the total number of positions
-  $totalPositions = count($refilteredPositions);
+//calculate the total number of positions
+$totalPositions = count($refilteredPositions);
 ?>
 <!DOCTYPE html> 
 <html lang="en">
@@ -113,21 +113,21 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>My Positions</title>
-        <script src="validation_addpos.js" defer></script>
-        <script src="theme_switcher.js" defer></script>
+        <script src="JS/validation_addpos.js" defer></script>
+        <script src="JS/theme_switcher.js" defer></script>
         <link rel="stylesheet" href="<?= $_SESSION["css"] ?>"> 
         <link rel="stylesheet" href="CSS/print.css" media="print">
-        <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-        <link rel="manifest" href="site.webmanifest">
+        <link rel="apple-touch-icon" sizes="180x180" href="pics/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="pics/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="pics/favicon-16x16.png">
+        <link rel="manifest" href="pics/site.webmanifest">
     </head>
     <body>
         <header class="group">
             <a href="homepage.php">
                 <img
                 alt="folio_logo"
-                src="folio-logo_blue-removebgx250.png"
+                src="pics/folio-logo_blue-removebgx250.png"
                 />
             </a>
           <div id="navbar">
@@ -197,22 +197,21 @@
           <?php
           //displays the table with the positions
           foreach ($additionalPositions as $position) {
-              // check if the position's user ID matches the session user ID
-                  echo "<tr class='tcontent'>";
-                  echo "<td class='name'>" . $position['name'] . "</td>";
-                  echo "<td class='ticker'>" . $position['ticker'] . "</td>";
-                  echo "<td class='long_short'>" . $position['longShort'] . "</td>";
-                  echo "<td class='date'>" . $position['date'] . "</td>";
-                  echo "<td class='currency'>" . $position['currency'] . "</td>";
-                  echo "<td class='amount'>" . $position['amount'] . "</td>";
-                  echo "<td class='opening_price'>" . $position['opening_price'] . "</td>";
-                  echo "<td class='closing_price'>" . $position['closing_price'] . " (" . $position['profit'] . "%)</td>";
-                  echo "<td class='type'>" . $position['type_select'] . "</td>";
-                  echo "<td class='delete'><a href='PHP/delete.php?id=" . $position['position_id'] . "'class='delete'>X</a></td>";
-                  echo "</tr>";
+            // check if the position's user ID matches the session user ID
+            echo "<tr class='tcontent'>";
+            echo "<td class='name'>" . $position['name'] . "</td>";
+            echo "<td class='ticker'>" . $position['ticker'] . "</td>";
+            echo "<td class='long_short'>" . $position['longShort'] . "</td>";
+            echo "<td class='date'>" . $position['date'] . "</td>";
+            echo "<td class='currency'>" . $position['currency'] . "</td>";
+            echo "<td class='amount'>" . $position['amount'] . "</td>";
+            echo "<td class='opening_price'>" . $position['opening_price'] . "</td>";
+            echo "<td class='closing_price'>" . $position['closing_price'] . " (" . $position['profit'] . "%)</td>";
+            echo "<td class='type'>" . $position['type_select'] . "</td>";
+            echo "<td class='delete'><a href='PHP/delete.php?id=" . $position['position_id'] . "'class='delete'>X</a></td>";
+            echo "</tr>";
           }
           ?>
-          
             </tbody></table>
             </div>
       <div id="pagination">

@@ -1,4 +1,5 @@
 <?php
+    //defines css variables
     $css = 'CSS/style.css';
     $css2 = 'CSS/style2.css';
     

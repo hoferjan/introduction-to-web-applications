@@ -1,15 +1,14 @@
 <?php
-  session_start();
-  if (!isset($_SESSION['css'])) {
-    $_SESSION['css'] = 'CSS/style.css';
+session_start();
+require "PHP/themeswitcher.php";
+
+if (!isset($_SESSION['css'])) {
+  $_SESSION['css'] = 'CSS/style.css';
 }
 
 if (!isset($_SESSION['csrf_token'])) {
   $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
-
-  require "PHP/themeswitcher.php";
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,10 +17,10 @@ if (!isset($_SESSION['csrf_token'])) {
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="<?= $_SESSION["css"] ?>">
     <link rel="stylesheet" href="CSS/print.css" media="print">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" sizes="180x180" href="pics/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="pics/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="pics/favicon-16x16.png">
+    <link rel="manifest" href="../pics/site.webmanifest">
   </head>
   <body id="homepage">
     <div id="page">
@@ -29,7 +28,7 @@ if (!isset($_SESSION['csrf_token'])) {
         <a href="mypositions.php">
             <img
             alt="folio_logo"
-            src="folio-logo_blue-removebgx250.png"
+            src="pics/folio-logo_blue-removebgx250.png"
             />
         </a>
         <div id="navbar">
@@ -39,6 +38,7 @@ if (!isset($_SESSION['csrf_token'])) {
       </header>
       <div id="content">
           <div id="punchline"><h1>You wanna track your portfolio? Try out Folio!</h1></div>
+          <!-- example table for the homepage -->
           <div id="table">
             <table>
                 <tbody><tr class="thead">

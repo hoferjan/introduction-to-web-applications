@@ -1,45 +1,44 @@
 <?php 
-    session_start();
-    if (!isset($_SESSION['css'])) {
-        $_SESSION['css'] = 'CSS/style.css';
+session_start();
+if (!isset($_SESSION['css'])) {
+    $_SESSION['css'] = 'CSS/style.css';
+}
+
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
 
-    if (!isset($_SESSION['csrf_token'])) {
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-      }
-    
-    require "PHP/logination.php";
-    require "PHP/themeswitcher.php";
+require "PHP/logination.php";
+require "PHP/themeswitcher.php";
 
-    //CSRF token protection
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // Validate the CSRF token
-        if ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
-            die('Invalid CSRF token');
+//CSRF token protection
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Validate the CSRF token
+    if ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
+        die('Invalid CSRF token');
+    }
+}
+
+$formIsSent = isset($_POST["log"]);
+$email = '';
+$password = '';
+$password2 = '';
+
+if ($formIsSent) {
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+// checks if email and password are correct
+    $user = new LoginUser($email, $password);
+    if ($user -> loginSession() == TRUE){
+        //redirect to mypositions.php and logs in user via session start
+        header("Location: mypositions.php");
+        } else{
+        //displays error message under log in button
         }
-    }
-
-    $formIsSent = isset($_POST["log"]);
-    $email = '';
-    $password = '';
-    $password2 = '';
-
-    if ($formIsSent) {
-        $email = $_POST["email"];
-        $password = $_POST["password"];
-
-    // checks if email and password are correct
-        $user = new LoginUser($email, $password);
-        if ($user -> loginSession() == TRUE){
-            //redirect to mypositions.php and logs in user via session start
-            header("Location: mypositions.php");
-            } else{
-            //displays error message under log in button
-            }
-    } else {
-        //shows errors under the input fields
-    }
-
+} else {
+    //shows errors under the input fields
+}
 ?>
 
 <!DOCTYPE html>
@@ -51,18 +50,18 @@
         <title>Log in</title>
         <link rel="stylesheet" href="<?= $_SESSION["css"] ?>"> 
         <link rel="stylesheet" href="CSS/print.css" media="print">
-        <script src="validation_login.js" defer></script>
-        <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-        <link rel="manifest" href="site.webmanifest">
+        <script src="JS/validation_login.js" defer></script>
+        <link rel="apple-touch-icon" sizes="180x180" href="pics/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="pics/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="pics/favicon-16x16.png">
+        <link rel="manifest" href="pics/site.webmanifest">
     </head>
     <body>
         <header class="group">
             <a href="homepage.php">
                 <img
                 alt="folio_logo"
-                src="folio-logo_blue-removebgx250.png"
+                src="pics/folio-logo_blue-removebgx250.png"
                 />
             </a>
             <div id="navbar">

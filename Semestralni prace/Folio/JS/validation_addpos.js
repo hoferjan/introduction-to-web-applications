@@ -95,7 +95,8 @@ function validateticker(e){
         } else {
             invalid_ticker.style.display = "none";
         }
-        if (ticker.value != ticker.value.toUpperCase()) { //ticker must be uppercase
+        //ticker must be uppercase
+        if (ticker.value != ticker.value.toUpperCase()) {
             ticker.value = ticker.value.toUpperCase();
         }
     } else {
@@ -117,6 +118,7 @@ function validateamount(e){
     }
     checkrequired();
 }
+
 //not necessery because user can just open position and not close it
 // function validate_close_price(e){
 //     if (close_price.value.length != 0) {

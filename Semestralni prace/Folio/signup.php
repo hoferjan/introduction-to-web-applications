@@ -1,42 +1,42 @@
 <?php 
-    session_start();
-    if (!isset($_SESSION['css'])) {
-        $_SESSION['css'] = 'CSS/style.css';
+session_start();
+require "PHP/registration.php";
+require "PHP/themeswitcher.php";
+
+if (!isset($_SESSION['css'])) {
+    $_SESSION['css'] = 'CSS/style.css';
+}
+
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
 
-    if (!isset($_SESSION['csrf_token'])) {
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-      }
-    
-    require "PHP/registration.php";
-    require "PHP/themeswitcher.php";
-    
-    //CSRF token protection
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // Validate the CSRF token
-        if ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
-            die('Invalid CSRF token');
-        }
+//CSRF token protection
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Validate the CSRF token
+    if ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
+        die('Invalid CSRF token');
     }
+}
 
-    $formIsSent = isset($_POST["reg"]);
-    $email = '';
-    $password = '';
-    $repeat_password = '';
-    $nickname = '';
-    $favorite_type = '';
+$formIsSent = isset($_POST["reg"]);
+$email = '';
+$password = '';
+$repeat_password = '';
+$nickname = '';
+$favorite_type = '';
 
-    if ($formIsSent) {
-        $email = $_POST["email"];
-        $password = $_POST["password"];
-        $repeat_password = $_POST["repeat_password"];
-        $nickname = $_POST["nickname"];
-        $favorite_type = $_POST["favorite_type"];
+if ($formIsSent) {
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+    $repeat_password = $_POST["repeat_password"];
+    $nickname = $_POST["nickname"];
+    $favorite_type = $_POST["favorite_type"];
 
-        //checks if email and password are not yet in the database, redirect to mypositions.php and logs in user with session start
-        $user =new RegisterUser($nickname, $password, $repeat_password, $email, $favorite_type);
-            
-        }
+    //checks if email and password are not yet in the database, redirect to mypositions.php and logs in user with session start
+    $user =new RegisterUser($nickname, $password, $repeat_password, $email, $favorite_type);
+        
+    }
           
 ?>
 
@@ -47,20 +47,20 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Signup</title>
-        <script src="validation_signup.js" defer></script> 
+        <script src="JS/validation_signup.js" defer></script> 
         <link rel="stylesheet" href="<?= $_SESSION["css"] ?>">
         <link rel="stylesheet" href="CSS/print.css" media="print">
-        <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-        <link rel="manifest" href="site.webmanifest">
+        <link rel="apple-touch-icon" sizes="180x180" href="pics/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="pics/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="pics/favicon-16x16.png">
+        <link rel="manifest" href="pics/site.webmanifest">
     </head>
     <body>
         <header class="group">
             <a href="homepage.php">
                 <img
                 alt="folio_logo"
-                src="folio-logo_blue-removebgx250.png"
+                src="pics/folio-logo_blue-removebgx250.png"
                 />
             </a>
             <div id="navbar">
@@ -99,7 +99,6 @@
                     echo '<br><span class="invalid-php">Invalid Entry</span><br>';
                     }
                 ?>
-                
 
                 <label for="password">Password: </label>
                 

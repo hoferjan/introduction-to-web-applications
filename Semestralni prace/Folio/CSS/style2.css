@@ -74,9 +74,7 @@ a:hover {
     padding: 0px;
 }
 
-
 /* table */
-
 table {
     border-collapse: collapse;
     width: 100%;
@@ -121,8 +119,8 @@ footer {
     align-content: center;
     
 }
-/* Forms */
 
+/* Forms */
 .content {
     float:center;
     text-align: center;
@@ -167,14 +165,12 @@ input[type=text]:focus, input[type=password]:focus , input[type=email]:focus, in
   }
 
 /* Select */
-
 select:focus {
     background-color: #ddd;
     outline: none;
   }
   
 /* Buttons */
-
 button {
     background-color: rgb(61, 184, 183) ;
     color: white;
@@ -191,7 +187,6 @@ button {
 button:hover {
     opacity:1;
   }
-
 
 /* Name Button */
 #namebutton {
@@ -273,6 +268,7 @@ button:hover {
         display: none;
     }
 }
+
 @media screen and (max-width: 780px) {
     h1 {
         font-size: 30px;
@@ -290,6 +286,7 @@ button:hover {
         display: none;
     }
 }
+
 @media screen and (max-width: 1000px) {
     #punchline {
         font-size: 25px;
@@ -316,6 +313,7 @@ button:hover {
         padding:0px;
     }
 }
+
 @media screen and (max-width: 480px) {
     .type {
         display: none;

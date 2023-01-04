@@ -14,7 +14,6 @@
     $this->stored_users = json_decode(file_get_contents($this->storage), true);
     $this->login();
  }
-
     // Function to check if the user exists and if the password is correct
     public function login(){
         foreach ($this->stored_users as $user) {
@@ -28,6 +27,7 @@
         $this->error = "Wrong email or password";
         return false;  
  }
+    // Function to check if the user exists and if the password is correct
     public function loginSession(){
         foreach ($this->stored_users as $user) {
         if($user['email'] == $this->email){
@@ -43,7 +43,7 @@
         return false;  
 } 
     }
-
+    //function that returns the user by uid
     function getUserByUid($uid){
         $users = json_decode(file_get_contents("JSON/users.json"), true);
         foreach($users as $user){

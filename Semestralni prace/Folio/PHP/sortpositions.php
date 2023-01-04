@@ -1,4 +1,5 @@
 <?php
+//sorts positions by the selected sort
 function sortPositions(array $positions, string $sort) {
   switch ($sort) {
     case "highest_price":

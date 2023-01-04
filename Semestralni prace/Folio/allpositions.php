@@ -1,82 +1,80 @@
 <?php 
-  session_start();
+session_start();
+require "PHP/logination.php";
+require "PHP/themeswitcher.php";
+require "PHP/loadpositions.php";
+require "PHP/filterpositions.php";
+require "PHP/sortpositions.php";
 
-  require "PHP/logination.php";
-  require "PHP/themeswitcher.php";
-  require "PHP/loadpositions.php";
-  require "PHP/filterpositions.php";
-  require "PHP/sortpositions.php";
+$filteredPositions = [];
 
-  
-  $filteredPositions = [];
+$uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
 
-  $uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : NULL;
+//sends to homepage if user is not logged in
+if ($uid) {
+    $user = getUserByUid($uid);
+} else {
+    header('Location: homepage.php');
+}
 
-  //sends to homepage if user is not logged in
-  if ($uid) {
-      $user = getUserByUid($uid);
-  } else {
-      header('Location: homepage.php');
+//CSRF token protection
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  // Validate the CSRF token
+  if ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
+      die('Invalid CSRF token');
   }
+}
 
-  //CSRF token protection
-  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Validate the CSRF token
-    if ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
-        die('Invalid CSRF token');
+// Load the positions from the JSON file
+$positions = json_decode(file_get_contents('JSON/positions.json'), true);
+
+
+//get only the positions which are not set to private or the user is the owner
+foreach ($positions as $position) {
+  if ($position['private_public'] != "private" && $position['uid'] != $_SESSION['uid']) {
+        //push position to filteredPositions
+        array_push($filteredPositions, $position);
     }
+}
+
+// Set the default page number
+$page = 1;
+
+// Check if the page form has been submitted
+if (isset($_POST['page'])) {
+  // Set the page number and offset from the form submission
+  $page = (int) $_POST['page'];
   }
 
-  // Load the positions from the JSON file
-  $positions = json_decode(file_get_contents('JSON/positions.json'), true);
 
+// Check if the type form has been submitted
+if (isset($_POST['type'])) {
+  // Get the type selected by the user
+  $type = $_POST['type'];
 
-  //get only the positions which are not set to private or the user is the owner
-  foreach ($positions as $position) {
-    if ($position['private_public'] != "private" && $position['uid'] != $_SESSION['uid']) {
-          //push position to filteredPositions
-          array_push($filteredPositions, $position);
-      }
-  }
+  // Filter the positions by type
+  $refilteredPositions = [];
+  $refilteredPositions = filterPositionsByType($type, $filteredPositions);
+}
 
-  // Set the default page number
-  $page = 1;
+// if user did not filter positions, set the filtered positions to the prefiltered positions
+if (!isset($refilteredPositions)) {
+  $refilteredPositions = $filteredPositions;
+}
 
-  // Check if the page form has been submitted
-  if (isset($_POST['page'])) {
-    // Set the page number and offset from the form submission
-    $page = (int) $_POST['page'];
-    }
+// Check if the sort form has been submitted
+if (isset($_POST['sort'])) {
+  // Get the sort selected by the user
+  $sort = $_POST['sort'];
 
+  // Sort the positions by the selected sort
+  $refilteredPositions = sortPositions($refilteredPositions, $sort);
+}
+// Retrieve the additional positions from the array
+$additionalPositions = array_slice($refilteredPositions, ($page - 1) * 20, 20);
 
-  // Check if the type form has been submitted
-  if (isset($_POST['type'])) {
-    // Get the type selected by the user
-    $type = $_POST['type'];
-
-    // Filter the positions by type
-    $refilteredPositions = [];
-    $refilteredPositions = filterPositionsByType($type, $filteredPositions);
-  }
-  
-  // if user did not filter positions, set the filtered positions to the prefiltered positions
-  if (!isset($refilteredPositions)) {
-    $refilteredPositions = $filteredPositions;
-  }
-
-  // Check if the sort form has been submitted
-  if (isset($_POST['sort'])) {
-    // Get the sort selected by the user
-    $sort = $_POST['sort'];
-
-    // Sort the positions by the selected sort
-    $refilteredPositions = sortPositions($refilteredPositions, $sort);
-  }
-  // Retrieve the additional positions from the array
-  $additionalPositions = array_slice($refilteredPositions, ($page - 1) * 20, 20);
-
-  //calculate the total number of positions
-  $totalPositions = count($refilteredPositions);
+//calculate the total number of positions
+$totalPositions = count($refilteredPositions);
 ?>
 
 <!DOCTYPE html>
@@ -88,17 +86,17 @@
         <title>All Positions</title>
         <link rel="stylesheet" href="<?= $_SESSION["css"] ?>">
         <link rel="stylesheet" href="CSS/print.css" media="print">
-        <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-        <link rel="manifest" href="site.webmanifest">
+        <link rel="apple-touch-icon" sizes="180x180" href="pics/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="pics/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="pics/favicon-16x16.png">
+        <link rel="manifest" href="pics/site.webmanifest">
     </head>
     <body>
         <header class="group">
             <a href="homepage.php">
                 <img
                 alt="folio_logo"
-                src="folio-logo_blue-removebgx250.png"
+                src="pics/folio-logo_blue-removebgx250.png"
                 />
             </a>
           <div id="navbar">
